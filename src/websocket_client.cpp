@@ -1,0 +1,81 @@
+//
+// Created by Ariel Saldana on 9/27/23.
+//
+
+#include "websocket_client.h"
+
+void WebsocketClient::on_ws_message(client *ws_client, websocketpp::connection_hdl hdl, const message_ptr &msg) {
+
+}
+
+void WebsocketClient::on_ws_close(client *ws_client, websocketpp::connection_hdl hdl) {
+
+}
+
+void WebsocketClient::on_ws_open(client *ws_client, websocketpp::connection_hdl hdl) {
+
+}
+
+void WebsocketClient::on_ws_fail(client *ws_client, websocketpp::connection_hdl hdl) {
+
+}
+
+void WebsocketClient::send_message(WebsocketClient::client *ws_client, websocketpp::connection_hdl hdl, WebsocketClient::message_ptr msg) {
+}
+
+WebsocketClient::WebsocketClient(const std::string &ws_uri, const std::string &ws_hostname) {
+    this->ws_uri = ws_uri;
+    this->ws_tls_hostname = ws_hostname;
+
+    ws_client.init_asio();
+
+    // Set handlers
+    ws_client.set_close_handler([this, client = &ws_client](auto &&hdl) {
+        on_ws_close(client, std::forward<decltype(hdl)>(hdl));
+    });
+    ws_client.set_fail_handler([this, client = &ws_client](auto &&hdl) {
+        on_ws_fail(client, std::forward<decltype(hdl)>(hdl));
+    });
+    ws_client.set_open_handler([this, client = &ws_client](auto &&hdl) {
+        on_ws_open(client, std::forward<decltype(hdl)>(hdl));
+    });
+    ws_client.set_message_handler([this, client = &ws_client](auto &&hdl, auto &&msg) {
+        on_ws_message(client, std::forward<decltype(hdl)>(hdl), std::forward<decltype(msg)>(msg));
+    });
+
+    ws_client.set_tls_init_handler([this, client = ws_hostname.c_str()](auto &&ws_hostname) {
+        return on_tls_init(client, std::forward<decltype(ws_hostname)>(ws_hostname));
+    });
+}
+
+WebsocketClient::context_ptr WebsocketClient::on_tls_init(const char *hostname, const websocketpp::connection_hdl&) {
+    m_tls_init = std::chrono::high_resolution_clock::now();
+    context_ptr ctx = websocketpp::lib::make_shared<asio::ssl::context>(asio::ssl::context::tls_client);
+
+    try
+    {
+        ctx->set_options(asio::ssl::context::default_workarounds |
+                         asio::ssl::context::no_sslv2 |
+                         asio::ssl::context::no_sslv3 |
+                         asio::ssl::context::single_dh_use);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    return ctx;
+}
+
+void WebsocketClient::connect() {
+    websocketpp::lib::error_code ec;
+    auto connection = ws_client.get_connection(ws_uri, ec);
+
+    if (ec) {
+        std::cout << "Connect initialization error: " << ec.message() << std::endl;
+        return;
+    }
+
+    ws_client.connect(connection);
+    ws_client.run();
+}
