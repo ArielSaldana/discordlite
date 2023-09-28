@@ -4,20 +4,20 @@
 
 #include "websocket_client.h"
 
-void WebsocketClient::on_ws_message(client *ws_client, websocketpp::connection_hdl hdl, const message_ptr &msg) {
-
+void WebsocketClient::on_ws_message(client *client, websocketpp::connection_hdl hdl, const message_ptr &msg) {
+    client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
 }
 
-void WebsocketClient::on_ws_close(client *ws_client, websocketpp::connection_hdl hdl) {
-
+void WebsocketClient::on_ws_close(client *client, websocketpp::connection_hdl hdl) {
+    client->get_alog().write(websocketpp::log::alevel::app, "Connection Closed");
 }
 
-void WebsocketClient::on_ws_open(client *ws_client, websocketpp::connection_hdl hdl) {
-
+void WebsocketClient::on_ws_open(client *client, websocketpp::connection_hdl hdl) {
+    client->get_alog().write(websocketpp::log::alevel::app, "Connection Opened");
 }
 
-void WebsocketClient::on_ws_fail(client *ws_client, websocketpp::connection_hdl hdl) {
-
+void WebsocketClient::on_ws_fail(client *client, websocketpp::connection_hdl hdl) {
+    client->get_alog().write(websocketpp::log::alevel::app, "Connection Failed");
 }
 
 void WebsocketClient::send_message(WebsocketClient::client *ws_client, websocketpp::connection_hdl hdl, WebsocketClient::message_ptr msg) {
@@ -26,6 +26,13 @@ void WebsocketClient::send_message(WebsocketClient::client *ws_client, websocket
 WebsocketClient::WebsocketClient(const std::string &ws_uri, const std::string &ws_hostname) {
     this->ws_uri = ws_uri;
     this->ws_tls_hostname = ws_hostname;
+
+    // Setup logging levels
+    ws_client.clear_access_channels(websocketpp::log::alevel::all);
+    ws_client.set_access_channels(websocketpp::log::alevel::app);
+    ws_client.set_access_channels(websocketpp::log::alevel::connect);
+    ws_client.set_access_channels(websocketpp::log::alevel::disconnect);
+    ws_client.set_access_channels(websocketpp::log::alevel::control);
 
     ws_client.init_asio();
 
