@@ -5,13 +5,13 @@
 #ifndef DISCORDLITE_WEBSOCKET_H
 #define DISCORDLITE_WEBSOCKET_H
 
-#define ASIO_STANDALONE// Use standalone ASIO
+#define ASIO_STANDALONE 1
+#define _WEBSOCKETPP_CPP11_THREAD_ 1
 
 #include <iostream>
 #include <websocketpp/client.hpp>
 #include <websocketpp/config/asio_client.hpp>
-#include <websocketpp/config/asio_no_tls_client.hpp>
-
+#include <mutex>
 
 class WebsocketClient {
 private:
