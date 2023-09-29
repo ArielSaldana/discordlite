@@ -15,5 +15,9 @@ discord_client::discord_client(std::string uri_input, std::string hostname_input
         std::cout << "CONNECTION!!" << std::endl;
     });
 
+    client.on_message([](const std::string &raw_payload) {
+        std::cout << raw_payload << std::endl;
+    });
+
     client.connect();
 }
