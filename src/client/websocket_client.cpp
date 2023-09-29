@@ -6,6 +6,11 @@
 
 void WebsocketClient::on_ws_message(client *client, websocketpp::connection_hdl hdl, const message_ptr &msg) {
     client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
+    if (on_message_cb_trigger)
+    {
+        on_message_cb_trigger(msg->get_raw_payload());
+    }
+
 }
 
 void WebsocketClient::on_ws_close(client *client, websocketpp::connection_hdl hdl) {
@@ -39,12 +44,21 @@ WebsocketClient::WebsocketClient(const std::string &ws_uri, const std::string &w
     // Set handlers
     ws_client.set_close_handler([this, client = &ws_client](auto &&hdl) {
         on_ws_close(client, std::forward<decltype(hdl)>(hdl));
+        if (on_connection_close_cb_trigger) {
+            on_connection_close_cb_trigger();
+        }
     });
     ws_client.set_fail_handler([this, client = &ws_client](auto &&hdl) {
         on_ws_fail(client, std::forward<decltype(hdl)>(hdl));
+        if (on_connection_fail_cb_trigger) {
+            on_connection_fail_cb_trigger();
+        }
     });
     ws_client.set_open_handler([this, client = &ws_client](auto &&hdl) {
         on_ws_open(client, std::forward<decltype(hdl)>(hdl));
+        if (on_connection_open_cb_trigger) {
+            on_connection_open_cb_trigger();
+        }
     });
     ws_client.set_message_handler([this, client = &ws_client](auto &&hdl, auto &&msg) {
         on_ws_message(client, std::forward<decltype(hdl)>(hdl), std::forward<decltype(msg)>(msg));
@@ -55,19 +69,16 @@ WebsocketClient::WebsocketClient(const std::string &ws_uri, const std::string &w
     });
 }
 
-WebsocketClient::context_ptr WebsocketClient::on_tls_init(const char *hostname, const websocketpp::connection_hdl&) {
+WebsocketClient::context_ptr WebsocketClient::on_tls_init(const char *hostname, const websocketpp::connection_hdl &) {
     m_tls_init = std::chrono::high_resolution_clock::now();
     context_ptr ctx = websocketpp::lib::make_shared<asio::ssl::context>(asio::ssl::context::tls_client);
 
-    try
-    {
+    try {
         ctx->set_options(asio::ssl::context::default_workarounds |
                          asio::ssl::context::no_sslv2 |
                          asio::ssl::context::no_sslv3 |
                          asio::ssl::context::single_dh_use);
-    }
-    catch (std::exception &e)
-    {
+    } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }
 

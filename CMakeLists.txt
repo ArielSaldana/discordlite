@@ -16,7 +16,9 @@ find_package(websocketpp CONFIG REQUIRED)
 
 # Create discordlite library
 add_library(discordlite src/library.cpp
-        src/websocket_client.cpp)
+        src/client/websocket_client.cpp
+        src/client/discord_client.cpp
+        src/client/discord_client.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
