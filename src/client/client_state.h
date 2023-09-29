@@ -12,7 +12,7 @@ struct client_state {
 public:
     explicit client_state() = default;
 
-    bool set_is_connected(bool connected) {
+    void set_is_connected(bool connected) {
         is_connected = connected;
     }
 
