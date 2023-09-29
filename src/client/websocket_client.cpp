@@ -6,11 +6,9 @@
 
 void WebsocketClient::on_ws_message(client *client, websocketpp::connection_hdl hdl, const message_ptr &msg) {
     client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
-    if (on_message_cb_trigger)
-    {
+    if (on_message_cb_trigger) {
         on_message_cb_trigger(msg->get_raw_payload());
     }
-
 }
 
 void WebsocketClient::on_ws_close(client *client, websocketpp::connection_hdl hdl) {
