@@ -18,12 +18,14 @@ find_package(websocketpp CONFIG REQUIRED)
 add_library(discordlite src/library.cpp
         src/client/websocket_client.cpp
         src/client/discord_client.cpp
-        src/client/discord_client.h)
+        src/client/discord_client.h
+        src/client/websocket_client.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${OPENSSL_INCLUDE_DIR}
         ${RapidJSON_INCLUDE_DIRS}
+        ${WEBSOCKETPP_INCLUDE_DIR}
 )
 target_link_libraries(discordlite
         PUBLIC
@@ -32,10 +34,17 @@ target_link_libraries(discordlite
         asio::asio
 )
 
+if(WIN32)
+    target_link_libraries(discordlite PUBLIC ws2_32)
+endif()
+
 # If you're not including Boost, ensure that you're using standalone Asio with websocketpp
 target_compile_definitions(discordlite
         PUBLIC
-        ASIO_STANDALONE
+#        ASIO_STANDALONE
+#        _WEBSOCKETPP_CPP11_THREAD_
+#        WEBSOCKETPP_BOOST_LIB_FREE
+        WEBSOCKETPP_NO_CPP11_SYSTEM_ERROR # Required if Boost system_error isn't available
 )
 
 # Add test-bot
