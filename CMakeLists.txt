@@ -23,7 +23,10 @@ add_library(discordlite src/library.cpp
         src/client/client_state.h
         src/protocol/dispatcher.cpp
         src/protocol/message.h
-        src/protocol/message.cpp)
+        src/protocol/message.cpp
+        src/models/gateway_event.h
+        src/deserializable.h
+        src/models/gateway_event.cpp)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -38,16 +41,16 @@ target_link_libraries(discordlite
         asio::asio
 )
 
-if(WIN32)
+if (WIN32)
     target_link_libraries(discordlite PUBLIC ws2_32)
-endif()
+endif ()
 
 # If you're not including Boost, ensure that you're using standalone Asio with websocketpp
 target_compile_definitions(discordlite
         PUBLIC
-#        ASIO_STANDALONE
-#        _WEBSOCKETPP_CPP11_THREAD_
-#        WEBSOCKETPP_BOOST_LIB_FREE
+        #        ASIO_STANDALONE
+        #        _WEBSOCKETPP_CPP11_THREAD_
+        #        WEBSOCKETPP_BOOST_LIB_FREE
         WEBSOCKETPP_NO_CPP11_SYSTEM_ERROR # Required if Boost system_error isn't available
 )
 

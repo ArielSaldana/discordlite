@@ -30,4 +30,6 @@ bool dispatcher::dispatch(message *message) {
     if (doc->IsObject()) {
         std::cout << message->get_opcode() << std::endl;
     }
+
+    return true;
 }

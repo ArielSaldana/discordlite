@@ -11,12 +11,18 @@
 #include <any>
 #include <variant>
 #include <string>
+#include <rapidjson/document.h>
 
 struct GatewayEvent {
+    typedef std::variant<GatewayEventPayload<HelloEvent>> event_data;
     int op;
-    std::variant<GatewayEventPayload<HelloEvent>> d;
+    event_data d;
     int s;
     std::string t;
+
+    GatewayEvent(const rapidjson::Document &doc);
+//    GatewayEvent deserialize(const rapidjson::Document &document) const override;
 };
+
 
 #endif//DISCORDLITE_GATEWAY_EVENT_H
