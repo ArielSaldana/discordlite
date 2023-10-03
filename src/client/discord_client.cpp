@@ -5,6 +5,7 @@
 #include "discord_client.h"
 #include "client_state.h"
 #include "websocket_client.h"
+#include "protocol/dispatcher.h"
 
 discord_client::discord_client(std::string uri_input, std::string hostname_input)
     : uri(std::move(uri_input)), hostname(std::move(hostname_input)) {
@@ -21,8 +22,9 @@ discord_client::discord_client(std::string uri_input, std::string hostname_input
         state.set_is_connected(false);
     });
 
+
     client.on_message([&state](const std::string &raw_payload) {
-        std::cout << raw_payload << std::endl;
+        dispatcher::handle_message(raw_payload);
         state.increase_sequence_counter();
     });
 

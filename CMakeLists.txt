@@ -20,7 +20,10 @@ add_library(discordlite src/library.cpp
         src/client/discord_client.cpp
         src/client/discord_client.h
         src/client/websocket_client.h
-        src/client/client_state.h)
+        src/client/client_state.h
+        src/protocol/dispatcher.cpp
+        src/protocol/message.h
+        src/protocol/message.cpp)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
