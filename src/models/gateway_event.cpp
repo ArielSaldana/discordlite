@@ -3,6 +3,7 @@
 //
 
 #include "gateway_event.h"
+#include "opcodes.h"
 //
 //GatewayEvent GatewayEvent::deserialize(const rapidjson::Document &document) override
 //{
@@ -22,6 +23,12 @@ GatewayEvent::GatewayEvent(const rapidjson::Document &doc) {
 
         if (doc.HasMember("t")) {
             t = doc["t"].GetString();
+        }
+
+        if (doc.HasMember("d")) {
+            if (op == opcodes::HELLO) {
+
+            }
         }
 
     }

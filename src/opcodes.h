@@ -5,7 +5,7 @@
 #ifndef DISCORDLITE_OP_CODES_H
 #define DISCORDLITE_OP_CODES_H
 
-enum Opcodes {
+enum opcodes {
     DISPATCH = 0,
     HEARTBEAT = 1,
     IDENTIFY = 2,
