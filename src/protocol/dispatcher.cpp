@@ -3,11 +3,12 @@
 //
 
 #include "dispatcher.h"
+#include "models/gateway_event.h"
 #include "rapidjson/document.h"
+#include "opcodes.h"
+#include "protocol/handlers/hello_handler.h"
 
 bool dispatcher::handle_message(const std::string &msg) {
-    std::cout << msg << std::endl;
-
     rapidjson::Document d;
     d.Parse(msg.c_str());
 
@@ -28,7 +29,12 @@ bool dispatcher::handle_message(const std::string &msg) {
 bool dispatcher::dispatch(message *message) {
     auto doc = message->get_json_document();
     if (doc->IsObject()) {
-        std::cout << message->get_opcode() << std::endl;
+        auto gwe = new GatewayEvent(*doc);
+
+        if (message->get_opcode() == opcodes::HELLO) {
+            auto* hello_event = dynamic_cast<HelloEvent*>(gwe->d.get());
+            hello_handler::process(*hello_event);
+        }
     }
 
     return true;

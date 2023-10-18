@@ -26,7 +26,11 @@ add_library(discordlite src/library.cpp
         src/protocol/message.cpp
         src/models/gateway_event.h
         src/deserializable.h
-        src/models/gateway_event.cpp)
+        src/models/gateway_event.cpp
+        src/protocol/handlers/hello_handler.cpp
+        src/protocol/handlers/hello_handler.h
+        src/protocol/handlers/handler.cpp
+        src/protocol/handlers/handler.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src

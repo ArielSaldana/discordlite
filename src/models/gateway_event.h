@@ -9,19 +9,16 @@
 #include "hello-event.h"
 #include <iostream>
 #include <any>
-#include <variant>
 #include <string>
 #include <rapidjson/document.h>
+#include <optional>
 
 struct GatewayEvent {
-    typedef std::variant<GatewayEventPayload<HelloEvent>> event_data;
     int op;
-    event_data d;
+    std::unique_ptr<GatewayEventPayload> d;
     int s;
     std::string t;
-
-    GatewayEvent(const rapidjson::Document &doc);
-//    GatewayEvent deserialize(const rapidjson::Document &document) const override;
+    explicit GatewayEvent(const rapidjson::Document &doc);
 };
 
 
