@@ -13,6 +13,8 @@
 #include <websocketpp/config/asio_client.hpp>
 #include <mutex>
 
+#include "message.h"
+
 class WebsocketClient {
 private:
     typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
@@ -31,7 +33,7 @@ private:
     std::function<void()> on_connection_open_cb_trigger = nullptr;
     std::function<void()> on_connection_close_cb_trigger = nullptr;
     std::function<void()> on_connection_fail_cb_trigger = nullptr;
-    std::function<void(const std::string raw_message)> on_message_cb_trigger = nullptr;
+    std::function<void(const message &msg)> on_message_cb_trigger = nullptr;
 
     void on_ws_message(client *ws_client, websocketpp::connection_hdl hdl, const message_ptr &msg);
     void on_ws_open(client *ws_client, websocketpp::connection_hdl hdl);

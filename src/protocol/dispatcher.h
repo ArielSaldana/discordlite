@@ -7,12 +7,12 @@
 
 #include <iostream>
 #include <string>
-#include "message.h"
+#include "client/message.h"
+#include "models/gateway_event.h"
 
 class dispatcher {
 public:
-    static bool handle_message(const std::string &msg);
-    static bool dispatch(message *msg);
+    static bool dispatch(const message &msg, const GatewayEvent &gateway_event);
 };
 
 

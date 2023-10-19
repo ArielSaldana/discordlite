@@ -6,6 +6,8 @@
 #include "client_state.h"
 #include "websocket_client.h"
 #include "protocol/dispatcher.h"
+#include "client/message.h"
+#include "deserializer.h"
 
 discord_client::discord_client(std::string uri_input, std::string hostname_input)
     : uri(std::move(uri_input)), hostname(std::move(hostname_input)) {
@@ -23,8 +25,14 @@ discord_client::discord_client(std::string uri_input, std::string hostname_input
     });
 
 
-    client.on_message([&state](const std::string &raw_payload) {
-        dispatcher::handle_message(raw_payload);
+    client.on_message([&state](const message &msg) {
+        auto raw_payload_string = msg.msg->get_raw_payload();
+
+        // 1st step should be to deserialize
+        auto gateway_event = deserializer::deserialize(raw_payload_string);
+
+        // 2nd step should be to forward the deserialized message to a handler for further action
+        dispatcher::dispatch(msg, gateway_event);
         state.increase_sequence_counter();
     });
 

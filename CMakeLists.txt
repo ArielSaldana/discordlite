@@ -30,7 +30,11 @@ add_library(discordlite src/library.cpp
         src/protocol/handlers/hello_handler.cpp
         src/protocol/handlers/hello_handler.h
         src/protocol/handlers/handler.cpp
-        src/protocol/handlers/handler.h)
+        src/protocol/handlers/handler.h
+        src/client/message.cpp
+        src/client/message.h
+        src/deserializer.cpp
+        src/deserializer.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <utility>
+
 class discord_client {
 private:
     bool is_ws_connection_established = false;

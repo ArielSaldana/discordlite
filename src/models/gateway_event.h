@@ -18,7 +18,7 @@ struct GatewayEvent {
     std::unique_ptr<GatewayEventPayload> d;
     int s;
     std::string t;
-    explicit GatewayEvent(const rapidjson::Document &doc);
+//    explicit GatewayEvent(const rapidjson::Document &doc);
 };
 
 
