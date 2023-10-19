@@ -24,7 +24,6 @@ discord_client::discord_client(std::string uri_input, std::string hostname_input
         state.set_is_connected(false);
     });
 
-
     client.on_message([&state](const message &msg) {
         auto raw_payload_string = msg.msg->get_raw_payload();
 
