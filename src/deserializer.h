@@ -11,6 +11,7 @@
  */
 
 #include "models/gateway_event.h"
+#include "rapidjson/document.h"
 
 class deserializer {
 public:

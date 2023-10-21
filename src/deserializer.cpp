@@ -4,6 +4,7 @@
 
 #include "deserializer.h"
 #include "opcodes.h"
+#include "models/hello-event.h"
 
 GatewayEvent deserializer::deserialize(const rapidjson::Document &doc) {
     GatewayEvent gwe{};

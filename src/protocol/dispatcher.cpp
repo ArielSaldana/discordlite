@@ -3,13 +3,14 @@
 //
 
 #include "dispatcher.h"
+#include "client/websocket_client.h"
 #include "opcodes.h"
-#include "protocol/handlers/hello_handler.h"
 
-bool dispatcher::dispatch(const message &message, const GatewayEvent &gateway_event) {
+bool dispatcher::dispatch(const WebsocketClient &ws_client, const GatewayEvent &gateway_event) {
     if (gateway_event.op == opcodes::HELLO) {
         auto *hello_event = dynamic_cast<HelloEvent *>(gateway_event.d.get());
-        std::cout << hello_event->heartbeat_interval << std::endl;
+        hello_handler h{};
+        h.process(ws_client, *hello_event);
     }
     return true;
 }

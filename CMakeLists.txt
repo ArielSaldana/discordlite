@@ -22,19 +22,17 @@ add_library(discordlite src/library.cpp
         src/client/websocket_client.h
         src/client/client_state.h
         src/protocol/dispatcher.cpp
-        src/protocol/message.h
-        src/protocol/message.cpp
         src/models/gateway_event.h
         src/deserializable.h
-        src/models/gateway_event.cpp
         src/protocol/handlers/hello_handler.cpp
         src/protocol/handlers/hello_handler.h
         src/protocol/handlers/handler.cpp
         src/protocol/handlers/handler.h
-        src/client/message.cpp
-        src/client/message.h
+        src/client/websocket_message.cpp
+        src/client/websocket_message.h
         src/deserializer.cpp
-        src/deserializer.h)
+        src/deserializer.h
+        src/protocol/ping.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
