@@ -13,7 +13,7 @@
 void hello_handler::process(const WebsocketClient &ws_client, const GatewayEventPayload &event) {
     auto token = "";
 
-    int combinedIntents = static_cast<int>(discord_intents::GUILDS) | static_cast<int>(discord_intents::GUILD_MEMBERS);
+    int combinedIntents = static_cast<int>(discord_intents::GUILDS) | static_cast<int>(discord_intents::GUILD_MEMBERS) | static_cast<int>(discord_intents::AUTO_MODERATION_EXECUTION) | static_cast<int>(discord_intents::GUILD_MESSAGES) ;
     auto identify_event = std::make_shared<IdentifyEvent>(token, 0, combinedIntents, properties{"os", "browser", "device"});
 
     rapidjson::Document doc;
