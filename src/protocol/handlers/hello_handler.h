@@ -10,12 +10,17 @@
 #include "models/gateway-event-payload.h"
 #include "models/hello-event.h"
 #include "protocol/ping.h"
+#include "handler.h"
 
-
-class hello_handler {
+class hello_handler: public handler {
     std::unique_ptr<ping> pinger;
 public:
-    void process(const WebsocketClient &ws_client, const HelloEvent &hello_event);
+    bool is_running;
+    explicit hello_handler() = default;
+    ~hello_handler() override = default;
+
+//    void process(const WebsocketClient &ws_client, const HelloEvent &hello_event);
+    void process(const WebsocketClient &ws_client, const GatewayEventPayload &event) override;
 };
 
 

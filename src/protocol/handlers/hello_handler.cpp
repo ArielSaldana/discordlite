@@ -3,16 +3,19 @@
 //
 
 #include "hello_handler.h"
+#include "handler.h"
 #include "iostream"
 #include <asio.hpp>
 #include <chrono>
 
-void hello_handler::process(const WebsocketClient &ws_client, const HelloEvent &hello_event) {
+void hello_handler::process(const WebsocketClient &ws_client, const GatewayEventPayload &event) {
+    //auto *hello_event = dynamic_cast<HelloEvent *>(event);
+    const auto *hello_event = dynamic_cast<const HelloEvent*>(&event);
 
-    ping sender(std::chrono::seconds (5), [&ws_client]() {
+    pinger = std::make_unique<ping>(std::chrono::milliseconds (hello_event->heartbeat_interval), [&ws_client]() {
         std::cout << "Sending heartbeat to server..." << std::endl;
         ws_client.send_message(R"({"op": 1,"d": 251})");
     });
 
-    std::this_thread::sleep_for(std::chrono::seconds(20));
+    is_running = true;
 }

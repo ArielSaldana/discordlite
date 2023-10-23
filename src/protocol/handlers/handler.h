@@ -5,8 +5,14 @@
 #ifndef DISCORDLITE_HANDLER_H
 #define DISCORDLITE_HANDLER_H
 
+#include "client/websocket_client.h"
+#include "models/gateway-event-payload.h"
 
 class handler {
+public:
+    virtual ~handler() = default;
+    virtual void process(const WebsocketClient &ws_client, const GatewayEventPayload &event) = 0;
+
 };
 
 

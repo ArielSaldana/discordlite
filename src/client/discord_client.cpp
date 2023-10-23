@@ -6,12 +6,15 @@
 #include "client/websocket_message.h"
 #include "client_state.h"
 #include "deserializer.h"
-#include "protocol/dispatcher.h"
 #include "websocket_client.h"
 #include "opcodes.h"
+#include "protocol/handlers/hello_handler.h"
+#include <memory>
 
 discord_client::discord_client(std::string uri_input, std::string hostname_input)
     : uri(std::move(uri_input)), hostname(std::move(hostname_input)) {
+
+    init_handlers();
 
     //    auto client = std::make_unique<WebsocketClient>("wss://gateway.discord.gg/?v=10&encoding=json", "gateway.discord.gg");
 //    WebsocketClient client("wss://gateway.discord.gg/?v=10&encoding=json", "gateway.discord.gg");
@@ -26,18 +29,20 @@ discord_client::discord_client(std::string uri_input, std::string hostname_input
         state.set_is_connected(false);
     });
 
-    typedef websocketpp::client<websocketpp::config::asio_tls_client> clientt;
 
-    client->on_message([&state, &client](const std::string &msg) {
+    typedef websocketpp::client<websocketpp::config::asio_tls_client> clientt;
+    client->on_message([this, &state, &client](const std::string &msg) {
         websocketpp::lib::error_code ec;
         auto gateway_event = deserializer::deserialize(msg);
-//        if (gateway_event.op == opcodes::HELLO) {
-//            client->send_message(R"({"op": 1,"d": 251})");
-//        }
-        dispatcher::dispatch(*client, gateway_event);
+        dispatcher.dispatch(*client, gateway_event);
         state.increase_sequence_counter();
     });
 
     client->connect();
     std::cout << state.is_connected << std::endl;
+}
+
+void discord_client::init_handlers() {
+    auto hello = std::make_unique<hello_handler>();
+    dispatcher.add_handler(opcodes::HELLO, std::move(hello));
 }
