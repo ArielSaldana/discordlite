@@ -17,7 +17,6 @@ void event_dispatcher::dispatch(const WebsocketClient &ws_client, const GatewayE
             auto *hello_event = dynamic_cast<HelloEvent *>(gateway_event.d.get());
             if (hello_event) {
                 auto event_handler = dynamic_cast<hello_handler *>(it->second.get());
-                std::cout << hello_event->heartbeat_interval << std::endl;
                 event_handler->process(ws_client, *hello_event);
             }
         }

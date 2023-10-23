@@ -7,11 +7,23 @@
 
 #include <iostream>
 #include <string>
+#include "serializable.h"
 
-struct Properties {
+struct properties: public serializable {
     std::string os;
     std::string browser;
     std::string device;
+
+    properties(std::string os, std::string browser, std::string device)
+        : os(std::move(os)), browser(std::move(browser)), device(std::move(device)) {}
+
+    rapidjson::Value to_json(rapidjson::Document::AllocatorType& allocator) override {
+        rapidjson::Value propertiesObj(rapidjson::kObjectType);
+        propertiesObj.AddMember("os", rapidjson::Value(os.c_str(), allocator), allocator);
+        propertiesObj.AddMember("browser", rapidjson::Value(browser.c_str(), allocator), allocator);
+        propertiesObj.AddMember("device", rapidjson::Value(device.c_str(), allocator), allocator);
+        return propertiesObj;
+    }
 };
 
 #endif//DISCORDLITE_PROPERTIES_H

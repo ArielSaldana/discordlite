@@ -36,7 +36,8 @@ add_library(discordlite src/library.cpp
         src/opcodes_hash.cpp
         src/opcodes_hash.h
         src/opcodes_utilities.cpp
-        src/opcodes_utilities.h)
+        src/opcodes_utilities.h
+        src/protocol/discord_intents.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src

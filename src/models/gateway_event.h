@@ -7,12 +7,34 @@
 
 #include "gateway-event-payload.h"
 #include <iostream>
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
 struct GatewayEvent {
     int op;
     std::shared_ptr<GatewayEventPayload> d;
     int s;
     std::string t;
+
+    std::string to_json_string() {
+        rapidjson::Document doc;
+        doc.SetObject();
+
+        rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+        doc.AddMember("op", op, allocator);
+//        doc.AddMember("d", d.get(), allocator);
+//        propertiesObj.AddMember("os", rapidjson::Value(props.os.c_str(), allocator), allocator);
+//        doc.AddMember("identify", ToJson(event, allocator), allocator);
+
+
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        doc.Accept(writer);
+
+        return buffer.GetString();
+    }
 
 };
 
