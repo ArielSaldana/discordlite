@@ -3,7 +3,7 @@
 //
 
 #include "event_dispatcher.h"
-#include "client/websocket_client.h"
+#include "client/websocket_client.hpp"
 #include "opcodes.h"
 #include "opcodes_hash.h"
 #include "opcodes_utilities.h"

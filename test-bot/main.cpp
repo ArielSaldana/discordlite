@@ -1,9 +1,9 @@
 //
 // Created by Ariel Saldana on 9/27/23.
 //
-#include "client/websocket_client.h"
+#include "client/discord_client.hpp"
+#include "client/websocket_client.hpp"
 #include "library.h"
-#include "client/discord_client.h"
 
 int main() {
     hello();

@@ -29,12 +29,11 @@ void hello_handler::process(const WebsocketClient &ws_client, const GatewayEvent
     auto msg = buffer.GetString();
 
     ws_client.send_message(msg);
-    std::cout << msg << std::endl;
 
+    // heartbeat logic
     const auto *hello_event = dynamic_cast<const HelloEvent *>(&event);
 
     pinger = std::make_unique<ping>(std::chrono::milliseconds(hello_event->heartbeat_interval), [&ws_client]() {
-        std::cout << "Sending heartbeat to server..." << std::endl;
         ws_client.send_message(R"({"op": 1,"d": 251})");
     });
     is_running = true;

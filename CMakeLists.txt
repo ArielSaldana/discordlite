@@ -3,6 +3,8 @@ project(discordlite)
 
 set(CMAKE_CXX_STANDARD 23)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # OpenSSL
 find_package(OpenSSL REQUIRED)
 
@@ -18,9 +20,8 @@ find_package(websocketpp CONFIG REQUIRED)
 add_library(discordlite src/library.cpp
         src/client/websocket_client.cpp
         src/client/discord_client.cpp
-        src/client/discord_client.h
-        src/client/websocket_client.h
-        src/client/client_state.h
+        src/client/discord_client.hpp
+        src/client/websocket_client.hpp
         src/protocol/event_dispatcher.cpp
         src/models/gateway_event.h
         src/deserializable.h
@@ -28,8 +29,6 @@ add_library(discordlite src/library.cpp
         src/protocol/handlers/hello_handler.h
         src/protocol/handlers/handler.cpp
         src/protocol/handlers/handler.h
-        src/client/websocket_message.cpp
-        src/client/websocket_message.h
         src/deserializer.cpp
         src/deserializer.h
         src/protocol/ping.h

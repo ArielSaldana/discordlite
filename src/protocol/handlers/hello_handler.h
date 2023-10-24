@@ -5,12 +5,11 @@
 #ifndef DISCORDLITE_HELLO_HANDLER_H
 #define DISCORDLITE_HELLO_HANDLER_H
 
-#include "client/websocket_client.h"
-#include "client/websocket_message.h"
+#include "client/websocket_client.hpp"
+#include "handler.h"
 #include "models/gateway-event-payload.h"
 #include "models/hello-event.h"
 #include "protocol/ping.h"
-#include "handler.h"
 
 class hello_handler: public handler {
     std::unique_ptr<ping> pinger;

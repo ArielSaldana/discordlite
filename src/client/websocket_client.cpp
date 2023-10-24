@@ -2,41 +2,34 @@
 // Created by Ariel Saldana on 9/27/23.
 //
 
-#include "websocket_client.h"
-#include "websocket_message.h"
+#include "websocket_client.hpp"
 
 #include <utility>
 
-void WebsocketClient::on_ws_message(client *client, const websocketpp::connection_hdl &hdl, const message_ptr &msg) {
-    client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
-
-    //    websocketpp::lib::error_code ec;
-    //    auto con = client->get_con_from_hdl(hdl, ec);
-    //    std::cerr << "Connection is in state pre-callback: " << con->get_state() << std::endl;
-    //
-    //    auto received_message = std::make_unique<websocket_message>(client, hdl, msg);
-    if (on_message_cb_trigger) {
-        //        on_message_cb_trigger(client, hdl, std::move(received_message));
-        //        on_message_cb_trigger(client, hdl);
-
-        std::cout << "Done with CB function" << std::endl;
-    }
+void WebsocketClient::on_ws_close(const websocketpp::connection_hdl&) {
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Closed");
+    scoped_lock guard(m_lock);
+    is_connected_ = false;
 }
 
-void WebsocketClient::on_ws_close(client *client, websocketpp::connection_hdl hdl) {
-    client->get_alog().write(websocketpp::log::alevel::app, "Connection Closed");
+void WebsocketClient::on_ws_fail(const websocketpp::connection_hdl&) {
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Failed");
+    scoped_lock guard(m_lock);
+    did_connection_fail_ = true;
 }
 
-void WebsocketClient::on_ws_open(client *client, websocketpp::connection_hdl hdl) {
-    client->get_alog().write(websocketpp::log::alevel::app, "Connection Opened");
-    ws_connection_hdl = hdl;
+void WebsocketClient::on_ws_open(const websocketpp::connection_hdl &hdl) {
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Opened");
+    scoped_lock guard(m_lock);
+    is_connected_ = true;
 }
 
-void WebsocketClient::on_ws_fail(client *client, websocketpp::connection_hdl hdl) {
-    client->get_alog().write(websocketpp::log::alevel::app, "Connection Failed");
+void WebsocketClient::on_ws_message(const websocketpp::connection_hdl &hdl, const message_ptr &msg) {
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
 }
 
 void WebsocketClient::send_message(const std::string &msg_str) const {
+    ws_client->get_alog().write(websocketpp::log::alevel::app, "sending message: " + msg_str);
     try {
         ws_client->send(ws_connection_hdl, msg_str, websocketpp::frame::opcode::text);
     } catch (const websocketpp::lib::error_code &e) {
@@ -58,28 +51,27 @@ WebsocketClient::WebsocketClient(const std::string &ws_uri, const std::string &w
     ws_client->init_asio();
 
     // Set handlers
-    ws_client->set_close_handler([this, client = &ws_client](auto &&hdl) {
-        on_ws_close(client->get(), std::forward<decltype(hdl)>(hdl));
+    ws_client->set_close_handler([this](auto &&hdl) {
+        on_ws_close(std::forward<decltype(hdl)>(hdl));
         if (on_connection_close_cb_trigger) {
-            on_connection_close_cb_trigger();
+            on_connection_close_cb_trigger(hdl);
         }
     });
-    ws_client->set_fail_handler([this, client = &ws_client](auto &&hdl) {
-        on_ws_fail(client->get(), std::forward<decltype(hdl)>(hdl));
+    ws_client->set_fail_handler([this](auto &&hdl) {
+        on_ws_fail(std::forward<decltype(hdl)>(hdl));
         if (on_connection_fail_cb_trigger) {
-            on_connection_fail_cb_trigger();
+            on_connection_fail_cb_trigger(hdl);
         }
     });
     ws_client->set_open_handler([this](auto &&hdl) {
-        on_ws_open(ws_client.get(), std::forward<decltype(hdl)>(hdl));
+        on_ws_open(std::forward<decltype(hdl)>(hdl));
         if (on_connection_open_cb_trigger) {
-            on_connection_open_cb_trigger();
+            on_connection_open_cb_trigger(hdl);
         }
     });
 
-    ws_client->set_message_handler([this, client = ws_client.get()](auto &&hdl, auto &&msg) {
-        //        get_client()->send(hdl, R"({"op": 1,"d": 251})", websocketpp::frame::opcode::text);
-        client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
+    ws_client->set_message_handler([this](auto &&hdl, auto &&msg) {
+        on_ws_message(  std::forward<decltype(hdl)>(hdl), std::forward<decltype(msg)>(msg));
         if (on_message_cb_trigger) {
             on_message_cb_trigger(msg->get_raw_payload());
         }
@@ -112,9 +104,15 @@ void WebsocketClient::connect() {
 
     if (ec) {
         std::cout << "Connect initialization error: " << ec.message() << std::endl;
+        did_connection_fail_ = true;
         return;
     }
 
     ws_client->connect(connection);
+    this->ws_connection_hdl = connection->get_handle();
     ws_client->run();
+}
+
+bool WebsocketClient::is_connected() {
+    return (is_connected_ && !did_connection_fail_);
 }

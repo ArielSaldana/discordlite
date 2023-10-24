@@ -5,8 +5,7 @@
 #ifndef DISCORDLITE_EVENT_DISPATCHER_H
 #define DISCORDLITE_EVENT_DISPATCHER_H
 
-#include "client/websocket_client.h"
-#include "client/websocket_message.h"
+#include "client/websocket_client.hpp"
 #include "models/gateway_event.h"
 #include "opcodes.h"
 #include "protocol/handlers/handler.h"
