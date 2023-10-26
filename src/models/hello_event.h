@@ -5,7 +5,7 @@
 #ifndef DISCORDLITE_HELLO_H
 #define DISCORDLITE_HELLO_H
 
-struct HelloEvent: GatewayEventPayload {
+struct hello_event : gateway_event_payload {
     int heartbeat_interval;
 };
 

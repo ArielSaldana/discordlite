@@ -15,8 +15,8 @@
 
 class deserializer {
 public:
-    static GatewayEvent deserialize(const rapidjson::Document &doc);
-    static GatewayEvent deserialize(const std::string &msg);
+    static gateway_event deserialize(const rapidjson::Document &doc);
+    static gateway_event deserialize(const std::string &msg);
 };
 
 

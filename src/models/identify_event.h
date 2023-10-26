@@ -10,19 +10,19 @@
 #include "properties.h"
 #include "serializable.h"
 
-struct IdentifyEvent: public serializable, GatewayEventPayload {
+struct identify_event : public serializable, gateway_event_payload {
     std::string token;
     int large_threshold;
     int intents;
     properties properties_;
 
-    IdentifyEvent(std::string token, int large_threshold, int intents, properties props)
+    identify_event(std::string token, int large_threshold, int intents, properties props)
         : token(std::move(token)), large_threshold(large_threshold), intents(intents), properties_(std::move(props)) {}
 
     rapidjson::Value to_json(rapidjson::Document::AllocatorType& allocator) override {
         rapidjson::Value identifyObj(rapidjson::kObjectType);
         identifyObj.AddMember("token", rapidjson::Value(token.c_str(), allocator), allocator);
-//        identifyObj.AddMember("large_threshold", large_threshold, allocator);
+        identifyObj.AddMember("large_threshold", large_threshold, allocator);
         identifyObj.AddMember("intents", intents, allocator);
         identifyObj.AddMember("properties", properties_.to_json(allocator), allocator);
         return identifyObj;

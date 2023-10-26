@@ -19,7 +19,7 @@ class event_dispatcher {
     std::unordered_map<opcodes, std::unique_ptr<handler>> handlers;
 
 public:
-    void dispatch(const discord_client_state &client, const GatewayEvent &gateway_event);
+    void dispatch(const discord_client_state &client, const gateway_event &gateway_event);
     void add_handler(const opcodes &, std::unique_ptr<handler>);
 };
 

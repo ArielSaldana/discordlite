@@ -3,11 +3,11 @@
 //
 
 #include "deserializer.h"
+#include "models/hello_event.h"
 #include "opcodes.h"
-#include "models/hello-event.h"
 
-GatewayEvent deserializer::deserialize(const rapidjson::Document &doc) {
-    GatewayEvent gwe{};
+gateway_event deserializer::deserialize(const rapidjson::Document &doc) {
+    gateway_event gwe{};
 
     if (doc.IsObject()) {
         if (doc.HasMember("op")) {
@@ -24,9 +24,9 @@ GatewayEvent deserializer::deserialize(const rapidjson::Document &doc) {
                 auto obj = doc["d"].GetObject();
 
                 if (obj.HasMember("heartbeat_interval")) {
-                    HelloEvent he{};
+                    hello_event he{};
                     he.heartbeat_interval = obj["heartbeat_interval"].GetInt();
-                    gwe.d = std::make_unique<HelloEvent>(he);
+                    gwe.d = std::make_unique<hello_event>(he);
                 }
             }
         }
@@ -34,7 +34,7 @@ GatewayEvent deserializer::deserialize(const rapidjson::Document &doc) {
     return gwe;
 }
 
-GatewayEvent deserializer::deserialize(const std::string &msg) {
+gateway_event deserializer::deserialize(const std::string &msg) {
     rapidjson::Document d;
     d.Parse(msg.c_str());
     return deserialize(d);

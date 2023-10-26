@@ -5,15 +5,15 @@
 #ifndef DISCORDLITE_GATEWAY_EVENT_H
 #define DISCORDLITE_GATEWAY_EVENT_H
 
-#include "gateway-event-payload.h"
+#include "gateway_event_payload.h"
 #include <iostream>
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-struct GatewayEvent {
+struct gateway_event {
     int op;
-    std::shared_ptr<GatewayEventPayload> d;
+    std::shared_ptr<gateway_event_payload> d;
     int s;
     std::string t;
 
