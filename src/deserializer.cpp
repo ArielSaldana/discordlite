@@ -20,9 +20,9 @@ gateway_event deserializer::deserialize(const rapidjson::Document &doc) {
             gwe.t = doc["t"].GetString();
         }
         if (doc.HasMember("d")) {
+//            auto& gv = doc["d"];
+            auto obj = doc["d"].GetObject();
             if (gwe.op == opcodes::HELLO) {
-                auto obj = doc["d"].GetObject();
-
                 if (obj.HasMember("heartbeat_interval")) {
                     hello_event he{};
                     he.heartbeat_interval = obj["heartbeat_interval"].GetInt();

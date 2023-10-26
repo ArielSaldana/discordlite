@@ -8,6 +8,7 @@
 #include "client/discord_client_state.h"
 #include "models/gateway_event.h"
 #include "opcodes.h"
+#include "protocol/handlers/dispatch_handler.h"
 #include "protocol/handlers/handler.h"
 #include "protocol/handlers/hello_handler.h"
 #include <iostream>
@@ -15,7 +16,8 @@
 #include <unordered_map>
 
 class event_dispatcher {
-    hello_handler hello{};
+    hello_handler hello_handle{};
+    dispatch_handler dispatch_handle{};
     std::unordered_map<opcodes, std::unique_ptr<handler>> handlers;
 
 public:

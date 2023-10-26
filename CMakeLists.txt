@@ -39,7 +39,10 @@ add_library(discordlite src/library.cpp
         src/protocol/discord_intents.h
         src/client/discord_client_state.cpp
         src/client/discord_client_state.h
-        src/protocol/discord_intents.cpp)
+        src/protocol/discord_intents.cpp
+        src/protocol/handlers/dispatch_handler.cpp
+        src/protocol/handlers/dispatch_handler.h
+        src/models/dispatch_event.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
