@@ -5,13 +5,13 @@
 #ifndef DISCORDLITE_HANDLER_H
 #define DISCORDLITE_HANDLER_H
 
-#include "client/websocket_client.hpp"
 #include "models/gateway-event-payload.h"
+#include "client/discord_client_state.h"
 
 class handler {
 public:
     virtual ~handler() = default;
-    virtual void process(const WebsocketClient &ws_client, const GatewayEventPayload &event) = 0;
+    virtual void process(const discord_client_state &client_state, const GatewayEventPayload &event) = 0;
 
 };
 

@@ -5,7 +5,7 @@
 #ifndef DISCORDLITE_HELLO_HANDLER_H
 #define DISCORDLITE_HELLO_HANDLER_H
 
-#include "client/websocket_client.hpp"
+#include "client/discord_client_state.h"
 #include "handler.h"
 #include "models/gateway-event-payload.h"
 #include "models/hello-event.h"
@@ -19,7 +19,9 @@ public:
     ~hello_handler() override = default;
 
 //    void process(const WebsocketClient &ws_client, const HelloEvent &hello_event);
-    void process(const WebsocketClient &ws_client, const GatewayEventPayload &event) override;
+    void process(const discord_client_state &client_state, const GatewayEventPayload &event) override;
+    void send_ready_event(const discord_client_state &client_state);
+    void start_heartbeat(const discord_client_state &client_state, int interval);
 };
 
 

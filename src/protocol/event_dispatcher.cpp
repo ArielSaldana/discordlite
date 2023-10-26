@@ -3,12 +3,11 @@
 //
 
 #include "event_dispatcher.h"
-#include "client/websocket_client.hpp"
 #include "opcodes.h"
 #include "opcodes_hash.h"
 #include "opcodes_utilities.h"
 
-void event_dispatcher::dispatch(const WebsocketClient &ws_client, const GatewayEvent &gateway_event) {
+void event_dispatcher::dispatch(const discord_client_state &client_state, const GatewayEvent &gateway_event) {
     opcodes opcode_value = opcodes_utilities::from_int(gateway_event.op);
     auto it = handlers.find(opcode_value);
     if (it != handlers.end()) {
@@ -17,7 +16,7 @@ void event_dispatcher::dispatch(const WebsocketClient &ws_client, const GatewayE
             auto *hello_event = dynamic_cast<HelloEvent *>(gateway_event.d.get());
             if (hello_event) {
                 auto event_handler = dynamic_cast<hello_handler *>(it->second.get());
-                event_handler->process(ws_client, *hello_event);
+                event_handler->process(client_state, *hello_event);
             }
         }
     }
