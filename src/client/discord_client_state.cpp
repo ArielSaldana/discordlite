@@ -3,7 +3,6 @@
 //
 
 #include "discord_client_state.h"
-
 #include <utility>
 
 std::optional<int> discord_client_state::get_sequence_counter() const {
@@ -49,7 +48,3 @@ void discord_client_state::set_intents(discord_intents intents) {
 discord_intents discord_client_state::get_intents() const {
     return intents_;
 }
-
-
-
-
