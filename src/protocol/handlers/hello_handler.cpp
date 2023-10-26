@@ -17,6 +17,7 @@ void hello_handler::process(const discord_client_state &client_state, const gate
     }
 
     send_ready_event(client_state);
+
     // heartbeat logic
     const auto *hello_gateway_event_payload = dynamic_cast<const hello_event *>(&event);
     start_heartbeat(client_state, hello_gateway_event_payload->heartbeat_interval);
@@ -24,9 +25,8 @@ void hello_handler::process(const discord_client_state &client_state, const gate
 
 void hello_handler::send_ready_event(const discord_client_state &client_state) {
     auto token = client_state.get_bot_token();
-
-    int combinedIntents = static_cast<int>(discord_intents::GUILDS) | static_cast<int>(discord_intents::GUILD_MEMBERS) | static_cast<int>(discord_intents::AUTO_MODERATION_EXECUTION) | static_cast<int>(discord_intents::GUILD_MESSAGES);
-    auto identify_ev = std::make_shared<identify_event>(token, 0, combinedIntents, properties{"os", "browser", "device"});
+    auto combined_intents = client_state.get_intents();
+    auto identify_ev = std::make_shared<identify_event>(token, 0, combined_intents.value(), properties{"os", "browser", "device"});
 
     rapidjson::Document doc;
     doc.SetObject();

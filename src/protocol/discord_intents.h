@@ -5,26 +5,44 @@
 #ifndef DISCORDLITE_DISCORD_INTENTS_H
 #define DISCORDLITE_DISCORD_INTENTS_H
 
-enum class discord_intents {
-    GUILDS              = 1 << 0,
-    GUILD_MEMBERS       = 1 << 1,
-    GUILD_MODERATION    = 1 << 2,
-    GUILD_EMOJIS_AND_STICKERS = 1 << 3,
-    GUILD_INTEGRATIONS  = 1 << 4,
-    GUILD_WEBHOOKS  = 1 << 5,
-    GUILD_INVITES  = 1 << 6,
-    GUILD_VOICE_STATES  = 1 << 7,
-    GUILD_PRESENCES  = 1 << 8,
-    GUILD_MESSAGES  = 1 << 9,
-    GUILD_MESSAGE_REACTIONS  = 1 << 10,
-    GUILD_MESSAGE_TYPING  = 1 << 11,
-    DIRECT_MESSAGES  = 1 << 12,
-    DIRECT_MESSAGE_REACTIONS  = 1 << 13,
-    DIRECT_MESSAGE_TYPING  = 1 << 14,
-    MESSAGE_CONTENT  = 1 << 15,
-    GUILD_SCHEDULED_EVENTS  = 1 << 16,
-    AUTO_MODERATION_CONFIGURATION  = 1 << 20,
-    AUTO_MODERATION_EXECUTION  = 1 << 21,
+#include <bitset>
+
+class discord_intents {
+public:
+    static const discord_intents GUILDS;
+    static const discord_intents GUILD_MEMBERS;
+    static const discord_intents GUILD_MODERATION;
+    static const discord_intents GUILD_EMOJIS_AND_STICKERS;
+    static const discord_intents GUILD_INTEGRATIONS;
+    static const discord_intents GUILD_WEBHOOKS;
+    static const discord_intents GUILD_INVITES;
+    static const discord_intents GUILD_VOICE_STATES;
+    static const discord_intents GUILD_PRESENCES;
+    static const discord_intents GUILD_MESSAGES;
+    static const discord_intents GUILD_MESSAGE_REACTIONS;
+    static const discord_intents GUILD_MESSAGE_TYPING;
+    static const discord_intents DIRECT_MESSAGES;
+    static const discord_intents DIRECT_MESSAGE_REACTIONS;
+    static const discord_intents DIRECT_MESSAGE_TYPING;
+    static const discord_intents MESSAGE_CONTENT;
+    static const discord_intents GUILD_SCHEDULED_EVENTS;
+    static const discord_intents AUTO_MODERATION_CONFIGURATION;
+    static const discord_intents AUTO_MODERATION_EXECUTION;
+
+    explicit discord_intents(int value);
+
+    [[nodiscard]] int value() const;
+
+    [[nodiscard]] std::bitset<32> bitset() const;
+
+    discord_intents(std::initializer_list<discord_intents> list);
+
+    discord_intents operator|(const discord_intents &other) const {
+        return discord_intents(value_ | other.value_);
+    }
+
+private:
+    int value_;
 };
 
 

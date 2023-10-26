@@ -15,7 +15,7 @@
 
 typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
-class WebsocketClient {
+class websocket_client {
 private:
     typedef websocketpp::lib::lock_guard<websocketpp::lib::mutex> scoped_lock;
     typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
@@ -81,7 +81,7 @@ public:
     bool is_connected();
     void send_message(const std::string &msg_str) const;
     void connect();
-    explicit WebsocketClient(const std::string &ws_uri, const std::string &ws_hostname);
+    explicit websocket_client(const std::string &ws_uri, const std::string &ws_hostname);
 
     template<typename Callable>
     void on_connection_open(Callable callback)

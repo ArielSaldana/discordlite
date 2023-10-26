@@ -9,11 +9,12 @@
 #include <memory>
 #include <utility>
 
-discord_client::discord_client(std::string bot_token) {
+discord_client::discord_client(std::string bot_token, const discord_intents &intents) {
     init_handlers();
 
     client_state.set_bot_token(std::move(bot_token));
-    client_state.set_ws_client(std::make_shared<WebsocketClient>(uri, hostname));
+    client_state.set_intents(intents);
+    client_state.set_ws_client(std::make_shared<websocket_client>(uri, hostname));
     client_state.get_ws_client()->on_connection_open([this](websocketpp::connection_hdl hdl) {
         client_state.set_is_connected(true);
     });

@@ -6,10 +6,11 @@
 #define DISCORDLITE_DISCORD_CLIENT_STATE_H
 
 #include "client/websocket_client.hpp"
+#include "protocol/discord_intents.h"
 #include <iostream>
 #include <string>
 
-class WebsocketClient;
+class websocket_client;
 
 class discord_client_state {
     /*
@@ -20,7 +21,7 @@ class discord_client_state {
     /*
      * Our client shared across the code base
      */
-    std::shared_ptr<WebsocketClient> ws_client_;
+    std::shared_ptr<websocket_client> ws_client_;
 
     /*
      * Our connection handle
@@ -39,16 +40,24 @@ class discord_client_state {
      */
     std::optional<int> sequence_counter_{};
 
+    /*
+     * Intents the client sends via ready event
+     */
+    discord_intents intents_{};
+
+
 public:
     [[nodiscard]] bool is_client_connected_to_gateway() const;
     [[nodiscard]] std::string get_bot_token() const;
-    [[nodiscard]] WebsocketClient *get_ws_client() const;
+    [[nodiscard]] websocket_client *get_ws_client() const;
     [[nodiscard]] std::optional<int> get_sequence_counter() const;
     void set_sequence_counter(int value);
     void set_is_connected(bool connected);
     void clear_bot_token();
     void set_bot_token(std::string);
-    void set_ws_client(std::shared_ptr<WebsocketClient> ws_client);
+    void set_ws_client(std::shared_ptr<websocket_client> ws_client);
+    void set_intents(discord_intents intents);
+    discord_intents get_intents() const;
 };
 
 

@@ -18,7 +18,7 @@ public:
     explicit hello_handler() = default;
     ~hello_handler() override = default;
 
-//    void process(const WebsocketClient &ws_client, const hello_event &hello_event);
+//    void process(const websocket_client &ws_client, const hello_event &hello_event);
     void process(const discord_client_state &client_state, const gateway_event_payload &event) override;
     void send_ready_event(const discord_client_state &client_state);
     void start_heartbeat(const discord_client_state &client_state, int interval);

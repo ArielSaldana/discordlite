@@ -20,7 +20,7 @@ private:
     event_dispatcher dispatcher{};
 
 public:
-    explicit discord_client(std::string bot_token);
+    explicit discord_client(std::string bot_token, const discord_intents &intents);
     void init_handlers();
     std::string get_bot_token();
 };

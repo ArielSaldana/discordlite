@@ -6,29 +6,29 @@
 
 #include <utility>
 
-void WebsocketClient::on_ws_close(const websocketpp::connection_hdl&) {
+void websocket_client::on_ws_close(const websocketpp::connection_hdl&) {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Closed");
     scoped_lock guard(m_lock);
     is_connected_ = false;
 }
 
-void WebsocketClient::on_ws_fail(const websocketpp::connection_hdl&) {
+void websocket_client::on_ws_fail(const websocketpp::connection_hdl&) {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Failed");
     scoped_lock guard(m_lock);
     did_connection_fail_ = true;
 }
 
-void WebsocketClient::on_ws_open(const websocketpp::connection_hdl &hdl) {
+void websocket_client::on_ws_open(const websocketpp::connection_hdl &hdl) {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Opened");
     scoped_lock guard(m_lock);
     is_connected_ = true;
 }
 
-void WebsocketClient::on_ws_message(const websocketpp::connection_hdl &hdl, const message_ptr &msg) {
+void websocket_client::on_ws_message(const websocketpp::connection_hdl &hdl, const message_ptr &msg) {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
 }
 
-void WebsocketClient::send_message(const std::string &msg_str) const {
+void websocket_client::send_message(const std::string &msg_str) const {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "sending message: " + msg_str);
     try {
         ws_client->send(ws_connection_hdl, msg_str, websocketpp::frame::opcode::text);
@@ -37,7 +37,7 @@ void WebsocketClient::send_message(const std::string &msg_str) const {
     }
 }
 
-WebsocketClient::WebsocketClient(const std::string &ws_uri, const std::string &ws_hostname) {
+websocket_client::websocket_client(const std::string &ws_uri, const std::string &ws_hostname) {
     this->ws_uri = ws_uri;
     this->ws_tls_hostname = ws_hostname;
 
@@ -82,7 +82,7 @@ WebsocketClient::WebsocketClient(const std::string &ws_uri, const std::string &w
     });
 }
 
-WebsocketClient::context_ptr WebsocketClient::on_tls_init(const char *hostname, const websocketpp::connection_hdl &) {
+websocket_client::context_ptr websocket_client::on_tls_init(const char *hostname, const websocketpp::connection_hdl &) {
     m_tls_init = std::chrono::high_resolution_clock::now();
     context_ptr ctx = websocketpp::lib::make_shared<asio::ssl::context>(asio::ssl::context::tls_client);
 
@@ -98,7 +98,7 @@ WebsocketClient::context_ptr WebsocketClient::on_tls_init(const char *hostname, 
     return ctx;
 }
 
-void WebsocketClient::connect() {
+void websocket_client::connect() {
     websocketpp::lib::error_code ec;
     auto connection = ws_client->get_connection(ws_uri, ec);
 
@@ -113,6 +113,6 @@ void WebsocketClient::connect() {
     ws_client->run();
 }
 
-bool WebsocketClient::is_connected() {
+bool websocket_client::is_connected() {
     return (is_connected_ && !did_connection_fail_);
 }

@@ -34,12 +34,22 @@ void discord_client_state::set_bot_token(std::string bot_token) {
     bot_token_ = std::move(bot_token);
 }
 
-WebsocketClient *discord_client_state::get_ws_client() const {
+websocket_client *discord_client_state::get_ws_client() const {
     return ws_client_.get();
 }
 
-void discord_client_state::set_ws_client(std::shared_ptr<WebsocketClient> ws_client) {
+void discord_client_state::set_ws_client(std::shared_ptr<websocket_client> ws_client) {
     ws_client_ = std::move(ws_client);
 }
+
+void discord_client_state::set_intents(discord_intents intents) {
+    this->intents_ = intents;
+}
+
+discord_intents discord_client_state::get_intents() const {
+    return intents_;
+}
+
+
 
 
