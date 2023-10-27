@@ -7,9 +7,9 @@
 
 #include "protocol/events/dispatch_event.h"
 #include "protocol/events/hello_event.h"
+#include "protocol/handlers/dispatch/message_create_handler.h"
 #include "protocol/handlers/dispatch_handler.h"
 #include "protocol/handlers/hello_handler.h"
-#include "protocol/handlers/dispatch/message_create_handler.h"
 
 struct event_handler {
 private:
@@ -23,14 +23,11 @@ private:
      */
     message_create_handler message_create_handle{};
 
-
 public:
     explicit event_handler(discord_client_state &state);
     void handle_event(const std::variant<dispatch_event, hello_event> &event_variant, const std::optional<std::string> &event_name) const;
     void operator()(const dispatch_event &event, const std::optional<std::string> &event_name) const;
-    //void operator()(const dispatch_event &event) const;
     void operator()(const hello_event &event) const;
 };
-
 
 #endif//DISCORDLITE_EVENT_HANDLER_H

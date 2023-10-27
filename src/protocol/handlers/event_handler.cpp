@@ -26,14 +26,6 @@ void event_handler::operator()(const hello_event &event) const {
     hello_handle.process(client_state, event);
 }
 
-//void event_handler::operator()(const dispatch_event &event, const std::optional<std::string> &event_name) const {
-//    dispatch_handle.process(client_state, event);
-//    if (event_name) {
-//        std::cout << "Specific event name in dispatch handler: " << *event_name << std::endl;
-//    }
-//    // You can access event_name here
-//}
-
 void event_handler::handle_event(const std::variant<dispatch_event, hello_event> &event_variant, const std::optional<std::string> &event_name) const {
     std::visit([this, &event_name](auto &&event) {
         using EventType = std::decay_t<decltype(event)>;
