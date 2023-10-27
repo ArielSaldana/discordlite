@@ -9,18 +9,27 @@
 #include "protocol/events/hello_event.h"
 #include "protocol/handlers/dispatch_handler.h"
 #include "protocol/handlers/hello_handler.h"
+#include "protocol/handlers/dispatch/message_create_handler.h"
 
 struct event_handler {
 private:
     discord_client_state client_state;
     hello_handler hello_handle{};
+    dispatch_handler dispatch_handle{};
+
+    /*
+     * unfortunately instead of creating different opcodes for things like messages, discord uses a common opcode "0"
+     * for "dispatch events" which payload can only be differentiated via the "t" field in the gateway event.
+     */
+    message_create_handler message_create_handle{};
 
 
 public:
     explicit event_handler(discord_client_state &state);
-    void operator()(const dispatch_event& event) const;
-    void operator()(const hello_event& event) const;
-
+    void handle_event(const std::variant<dispatch_event, hello_event> &event_variant, const std::optional<std::string> &event_name) const;
+    void operator()(const dispatch_event &event, const std::optional<std::string> &event_name) const;
+    //void operator()(const dispatch_event &event) const;
+    void operator()(const hello_event &event) const;
 };
 
 

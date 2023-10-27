@@ -22,7 +22,12 @@ gateway_event deserializer::deserialize(const rapidjson::Document &doc) {
         if (doc.HasMember("d") && doc["d"].IsObject()) {
             auto &gv = doc["d"];
             auto obj = doc["d"].GetObject();
-            if (gwe.op == opcodes::HELLO) {
+
+            if (gwe.op == opcodes::DISPATCH) {
+                dispatch_event event{};
+                event.deserialize(gv);
+                gwe.d = event;
+            } else if (gwe.op == opcodes::HELLO) {
                 hello_event he{};
                 he.deserialize(gv);
                 gwe.d = he;

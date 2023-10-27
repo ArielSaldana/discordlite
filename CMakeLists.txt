@@ -16,6 +16,8 @@ find_package(asio CONFIG REQUIRED)
 # Websocketpp
 find_package(websocketpp CONFIG REQUIRED)
 
+find_package(CURL CONFIG REQUIRED)
+
 # Create discordlite library
 add_library(discordlite src/library.cpp
         src/client/websocket_client.cpp
@@ -42,7 +44,12 @@ add_library(discordlite src/library.cpp
         src/protocol/events/dispatch_event.h
         src/protocol/events/hello_event.cpp
         src/protocol/handlers/event_handler.cpp
-        src/protocol/handlers/event_handler.h)
+        src/protocol/handlers/event_handler.h
+        src/protocol/handlers/dispatch/message_create_handler.cpp
+        src/protocol/handlers/dispatch/message_create_handler.h
+        src/protocol/events/dispatch_event.cpp
+        src/http-client/send_message.h
+        src/protocol/events/author.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -55,6 +62,7 @@ target_link_libraries(discordlite
         OpenSSL::SSL
         OpenSSL::Crypto
         asio::asio
+        CURL::libcurl
 )
 
 if (WIN32)

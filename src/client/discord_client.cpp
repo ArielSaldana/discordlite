@@ -28,7 +28,9 @@ discord_client::discord_client(std::string bot_token, const discord_intents &int
         if (gateway_event.s) {
             client_state.set_sequence_counter(gateway_event.s);
         }
-        std::visit(*handler, gateway_event.d);
+
+        handler->handle_event(gateway_event.d, gateway_event.t);
+        //std::visit(*handler, gateway_event.d);
     });
     client_state.get_ws_client()->connect();
 }
