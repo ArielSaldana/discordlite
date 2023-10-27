@@ -16,8 +16,8 @@ void send_message(const std::string& channel_id, const std::string& message, con
     curl = curl_easy_init();
 
     if(curl) {
-        std::string url = "https://discord.com/api/v9/channels/" + channel_id + "/messages";
-        std::string json = "{\"content\": \"" + message + "\", \"tts\": false}";
+        std::string url = "https://discord.com/api/v10/channels/" + channel_id + "/messages";
+        std::string json = R"({"content": ")" + message + R"(", "tts": false})";
 
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, ("Authorization: Bot " + token).c_str());

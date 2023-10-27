@@ -8,6 +8,7 @@
 #include "websocket_client.hpp"
 #include <memory>
 #include <utility>
+#include "http-client/register_slash_command.h"
 
 discord_client::discord_client(std::string bot_token, const discord_intents &intents) {
     client_state.set_bot_token(std::move(bot_token));
@@ -15,6 +16,8 @@ discord_client::discord_client(std::string bot_token, const discord_intents &int
     client_state.set_ws_client(std::make_shared<websocket_client>(uri, hostname));
 
     event_handler_ = std::make_unique<event_handler>(this->client_state);
+
+    register_slash_command(client_state.get_bot_token(), "1156420471013777580", "642866879916146699");
 
     client_state.get_ws_client()->on_connection_open([this](websocketpp::connection_hdl hdl) {
         client_state.set_is_connected(true);

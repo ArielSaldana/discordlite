@@ -19,6 +19,17 @@ void dispatch_event::deserialize(const rapidjson::Value &value) {
         au.deserialize(value["author"].GetObject());
         author_ = au;
     }
+    if (value.HasMember("id") && value["id"].IsString()) {
+        id_ = value["id"].GetString();
+    }
+
+    if (value.HasMember("token") && value["token"].IsString()) {
+        token_ = value["token"].GetString();
+    }
+
+    if (value.HasMember("type") && value["type"].IsInt()) {
+        type_ = value["type"].GetInt();
+    }
 }
 const std::optional<std::string> &dispatch_event::getGuildId() const {
     return guild_id_;
@@ -31,4 +42,13 @@ const std::optional<std::string> &dispatch_event::getChannelId() const {
 }
 const std::optional<author> &dispatch_event::getAuthor() const {
     return author_;
+}
+const std::optional<std::string> &dispatch_event::getToken() const {
+    return token_;
+}
+const std::optional<std::string> &dispatch_event::getId() const {
+    return id_;
+}
+const std::optional<int> &dispatch_event::getType() const {
+    return type_;
 }

@@ -2,7 +2,7 @@
 // Created by Ariel Saldana on 9/27/23.
 //
 
-#include "websocket_client.hpp"
+#include "client/websocket_client.hpp"
 
 #include <utility>
 
@@ -28,12 +28,14 @@ void websocket_client::on_ws_message(const websocketpp::connection_hdl &hdl, con
     ws_client->get_alog().write(websocketpp::log::alevel::app, "on_ws_message handler: " + msg->get_payload());
 }
 
-void websocket_client::send_message(const std::string &msg_str) const {
+void websocket_client::send_message(const std::string &msg_str) {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "sending message: " + msg_str);
-    try {
-        ws_client->send(ws_connection_hdl, msg_str, websocketpp::frame::opcode::text);
-    } catch (const websocketpp::lib::error_code &e) {
-        std::cerr << "Send failed: " << e.message() << std::endl;
+
+    websocketpp::lib::error_code ec;
+    ws_client->send(ws_connection_hdl, msg_str, websocketpp::frame::opcode::text, ec);
+
+    if (ec) {
+        std::cerr << "Send failed: " << ec.message() << std::endl;
     }
 }
 

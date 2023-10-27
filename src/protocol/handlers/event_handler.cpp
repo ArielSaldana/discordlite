@@ -13,6 +13,8 @@ void event_handler::operator()(const dispatch_event &event, const std::optional<
         const std::string& name = *event_name;
         if (name == "MESSAGE_CREATE") {
             message_create_handle.process(client_state, event);
+        } else if (name == "INTERACTION_CREATE") {
+            interaction_create_handle.process(client_state, event);
         } else {
             std::cout << "Unknown event name: " << name << std::endl;
             dispatch_handle.process(client_state, event);

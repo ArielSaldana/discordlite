@@ -79,7 +79,7 @@ private:
 
 public:
     bool is_connected();
-    void send_message(const std::string &msg_str) const;
+    void send_message(const std::string &msg_str);
     void connect();
     explicit websocket_client(const std::string &ws_uri, const std::string &ws_hostname);
 

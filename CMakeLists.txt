@@ -28,7 +28,6 @@ add_library(discordlite src/library.cpp
         src/protocol/deserializable.h
         src/protocol/handlers/hello_handler.cpp
         src/protocol/handlers/hello_handler.h
-        src/protocol/handlers/handler.cpp
         src/protocol/handlers/handler.h
         src/protocol/deserializer.cpp
         src/protocol/deserializer.h
@@ -49,7 +48,11 @@ add_library(discordlite src/library.cpp
         src/protocol/handlers/dispatch/message_create_handler.h
         src/protocol/events/dispatch_event.cpp
         src/http-client/send_message.h
-        src/protocol/events/author.h)
+        src/protocol/events/author.h
+        src/http-client/register_slash_command.h
+        src/http-client/ping_slash_command.h
+        src/protocol/handlers/dispatch/interaction_create_handler.cpp
+        src/protocol/handlers/dispatch/interaction_create_handler.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -72,9 +75,10 @@ endif ()
 # If you're not including Boost, ensure that you're using standalone Asio with websocketpp
 target_compile_definitions(discordlite
         PUBLIC
-        #        ASIO_STANDALONE
-        #        _WEBSOCKETPP_CPP11_THREAD_
-        #        WEBSOCKETPP_BOOST_LIB_FREE
+        WEBSOCKETPP_STANDALONE_ASIO
+                ASIO_STANDALONE
+                _WEBSOCKETPP_CPP11_THREAD_
+                WEBSOCKETPP_BOOST_LIB_FREE
         WEBSOCKETPP_NO_CPP11_SYSTEM_ERROR # Required if Boost system_error isn't available
 )
 

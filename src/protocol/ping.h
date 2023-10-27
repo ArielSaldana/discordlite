@@ -31,6 +31,8 @@ public:
         start_timer();
     }
 
+    ping();
+
     ~ping() {
         stop();
         if (thread_ && thread_->joinable()) {

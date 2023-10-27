@@ -8,6 +8,7 @@
 #include "protocol/events/dispatch_event.h"
 #include "protocol/events/hello_event.h"
 #include "protocol/handlers/dispatch/message_create_handler.h"
+#include "protocol/handlers/dispatch/interaction_create_handler.h"
 #include "protocol/handlers/dispatch_handler.h"
 #include "protocol/handlers/hello_handler.h"
 
@@ -22,6 +23,7 @@ private:
      * for "dispatch events" which payload can only be differentiated via the "t" field in the gateway event.
      */
     message_create_handler message_create_handle{};
+    interaction_create_handler interaction_create_handle{};
 
 public:
     explicit event_handler(discord_client_state &state);

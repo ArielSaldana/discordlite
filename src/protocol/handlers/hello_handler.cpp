@@ -9,15 +9,17 @@
 #include "protocol/events/gateway_event.h"
 #include "protocol/events/identify_event.h"
 #include <chrono>
+#include <memory>
 
 void hello_handler::process(const discord_client_state &client_state, const hello_event &event) const {
     // don't call again if this is already running
     if (is_running) {
+        std::cerr << "Attempted to begin another heartbeat thread while a thread is already running: " << std::endl;
         return;
     }
 
-    send_ready_event(client_state);
     start_heartbeat(client_state, event.get_heartbeat_interval());
+    send_ready_event(client_state);
 }
 
 void hello_handler::send_ready_event(const discord_client_state &client_state) const {
@@ -47,5 +49,6 @@ void hello_handler::start_heartbeat(const discord_client_state &client_state, in
         ss << R"({"op": 1,"d": )" << s << R"(})";
         client_state.get_ws_client()->send_message(ss.str());
     });
+    std::cout << "Started running thread" << std::endl;
     is_running = true;
 }
