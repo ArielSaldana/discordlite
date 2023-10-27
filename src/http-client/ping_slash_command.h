@@ -13,7 +13,7 @@ void ping_slash_command_response(const std::string &interaction_id, const std::s
     CURL *curl = curl_easy_init();
     if (curl) {
         std::string url = "https://discord.com/api/v10/interactions/" + interaction_id + "/" + interaction_token + "/callback";
-        std::string json = R"({"type": 4,"data": {"content": "Pong!"}})";
+        std::string json = R"({"type": 4,"data": {"content": "Bong!"}})";
 
         struct curl_slist *headers = nullptr;
         headers = curl_slist_append(headers, "Content-Type: application/json");

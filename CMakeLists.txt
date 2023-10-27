@@ -2,8 +2,19 @@ cmake_minimum_required(VERSION 3.26)
 project(discordlite)
 
 set(CMAKE_CXX_STANDARD 23)
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+SET (CMAKE_CXX_FLAGS_INIT                "-Wall -std=c++17")
+SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g")
+SET (CMAKE_CXX_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+option(USE_CLANG "build application with clang" ON)
+
+if(USE_CLANG)
+    SET (...)
+endif(USE_CLANG)
+
+
 
 # OpenSSL
 find_package(OpenSSL REQUIRED)
