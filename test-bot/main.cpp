@@ -8,6 +8,7 @@
 #include <string>
 
 int main() {
+    const bool yes = true;
     const char* bot_token = std::getenv("BOT_TOKEN");
     if (bot_token) {
         std::string token = bot_token;  // Convert to std::string for ease of use
@@ -18,6 +19,14 @@ int main() {
                 discord_intents::MESSAGE_CONTENT,
                 discord_intents::AUTO_MODERATION_EXECUTION};
         discord_client client(token, combined_intents);
+
+        // other bot api shit
+
+        /*
+         *  discord_client.on_guild_message(int guild_id, std::string msg)
+         *  discord_client.on_guild_join(int guild_id, const discord_user &user)
+         */
+
     } else {
         std::cout << "Environment variable BOT_TOKEN is not set." << std::endl;
     }

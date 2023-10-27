@@ -11,12 +11,17 @@
 class opcodes_utilities {
 public:
     static opcodes from_int(int value) {
-        switch(value) {
-            case 0: return opcodes::DISPATCH;
-            case 1: return opcodes::HEARTBEAT;
-            case 10: return opcodes::HELLO;
-            case 11: return opcodes::HEARTBEAT_ACK;
-            default: throw std::invalid_argument("Invalid opcode value");
+        switch (value) {
+            case 0:
+                return opcodes::DISPATCH;
+            case 1:
+                return opcodes::HEARTBEAT;
+            case 10:
+                return opcodes::HELLO;
+            case 11:
+                return opcodes::HEARTBEAT_ACK;
+            default:
+                throw std::invalid_argument("Invalid opcode value");
         }
     }
 };

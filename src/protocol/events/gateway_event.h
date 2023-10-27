@@ -16,11 +16,9 @@
 
 struct gateway_event {
     int op;
-//    std::shared_ptr<gateway_event_payload> d;
     std::variant<dispatch_event, hello_event> d;
     int s;
     std::string t;
 };
-
 
 #endif//DISCORDLITE_GATEWAY_EVENT_H

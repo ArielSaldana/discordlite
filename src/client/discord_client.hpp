@@ -18,6 +18,7 @@ private:
     const std::string hostname = "gateway.discord.gg";
     discord_client_state client_state{};
     std::unique_ptr<event_handler> event_handler_;
+
 public:
     explicit discord_client(std::string bot_token, const discord_intents &intents);
 };

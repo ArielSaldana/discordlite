@@ -9,9 +9,9 @@
 #define _WEBSOCKETPP_CPP11_THREAD_ 1
 
 #include <iostream>
+#include <mutex>
 #include <websocketpp/client.hpp>
 #include <websocketpp/config/asio_client.hpp>
-#include <mutex>
 
 typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
@@ -71,8 +71,8 @@ private:
     /*
      * Handlers for events
      */
-    void on_ws_open(const websocketpp::connection_hdl& hdl);
-    void on_ws_close(const websocketpp::connection_hdl& hdl);
+    void on_ws_open(const websocketpp::connection_hdl &hdl);
+    void on_ws_close(const websocketpp::connection_hdl &hdl);
     void on_ws_fail(const websocketpp::connection_hdl &hdl);
     void on_ws_message(const websocketpp::connection_hdl &hdl, const message_ptr &msg);
     context_ptr on_tls_init(const char *hostname, const websocketpp::connection_hdl &);
@@ -84,30 +84,26 @@ public:
     explicit websocket_client(const std::string &ws_uri, const std::string &ws_hostname);
 
     template<typename Callable>
-    void on_connection_open(Callable callback)
-    {
+    void on_connection_open(Callable callback) {
         this->on_connection_open_cb_trigger = std::move(callback);
     }
 
     template<typename Callable>
-    void on_connection_close(Callable callback)
-    {
+    void on_connection_close(Callable callback) {
         this->on_connection_close_cb_trigger = std::move(callback);
     }
 
     template<typename Callable>
-    void on_connection_fail(Callable callback)
-    {
+    void on_connection_fail(Callable callback) {
         this->on_connection_fail_cb_trigger = std::move(callback);
     }
 
     template<typename Callable>
-    void on_message(Callable &&callback)
-    {
+    void on_message(Callable &&callback) {
         this->on_message_cb_trigger = std::forward<Callable>(callback);
     }
 
-    client * get_client() {
+    client *get_client() {
         return ws_client.get();
     }
 };

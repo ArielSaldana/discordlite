@@ -12,6 +12,7 @@
 struct hello_event : public gateway_event_payload, public deserializable {
     void deserialize(const rapidjson::Value &value) override;
     [[nodiscard]] int get_heartbeat_interval() const;
+
 private:
     int heartbeat_interval_;
 };

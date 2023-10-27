@@ -10,7 +10,7 @@
 #include <rapidjson/writer.h>
 
 class serializable {
-    virtual rapidjson::Value to_json(rapidjson::Document::AllocatorType& allocator) = 0;
+    virtual rapidjson::Value to_json(rapidjson::Document::AllocatorType &allocator) = 0;
 };
 
 #endif//DISCORDLITE_SERIALIZABLE_H

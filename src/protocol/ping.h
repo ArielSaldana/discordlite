@@ -5,10 +5,10 @@
 #ifndef DISCORDLITE_PING_H
 #define DISCORDLITE_PING_H
 
-#include <iostream>
 #include <asio.hpp>
 #include <chrono>
 #include <functional>
+#include <iostream>
 
 class ping {
 private:
@@ -20,7 +20,7 @@ private:
     bool stop_requested_ = false;
 
 public:
-    ping(std::chrono::milliseconds interval, const std::function<void()>& callback)
+    ping(std::chrono::milliseconds interval, const std::function<void()> &callback)
         : timer_(io_context_),
           callback_(callback),
           interval_(interval) {
@@ -40,7 +40,7 @@ public:
 
     void start_timer() {
         timer_.expires_after(interval_);
-        timer_.async_wait([this](const asio::error_code& error) {
+        timer_.async_wait([this](const asio::error_code &error) {
             if (!error && !stop_requested_) {
                 // Execute the callback
                 callback_();

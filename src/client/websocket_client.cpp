@@ -6,13 +6,13 @@
 
 #include <utility>
 
-void websocket_client::on_ws_close(const websocketpp::connection_hdl&) {
+void websocket_client::on_ws_close(const websocketpp::connection_hdl &) {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Closed");
     scoped_lock guard(m_lock);
     is_connected_ = false;
 }
 
-void websocket_client::on_ws_fail(const websocketpp::connection_hdl&) {
+void websocket_client::on_ws_fail(const websocketpp::connection_hdl &) {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Failed");
     scoped_lock guard(m_lock);
     did_connection_fail_ = true;
@@ -71,7 +71,7 @@ websocket_client::websocket_client(const std::string &ws_uri, const std::string 
     });
 
     ws_client->set_message_handler([this](auto &&hdl, auto &&msg) {
-        on_ws_message(  std::forward<decltype(hdl)>(hdl), std::forward<decltype(msg)>(msg));
+        on_ws_message(std::forward<decltype(hdl)>(hdl), std::forward<decltype(msg)>(msg));
         if (on_message_cb_trigger) {
             on_message_cb_trigger(msg->get_raw_payload());
         }

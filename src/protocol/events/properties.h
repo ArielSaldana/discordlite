@@ -9,7 +9,7 @@
 #include <iostream>
 #include <string>
 
-struct properties: public serializable {
+struct properties : public serializable {
     std::string os;
     std::string browser;
     std::string device;
@@ -17,7 +17,7 @@ struct properties: public serializable {
     properties(std::string os, std::string browser, std::string device)
         : os(std::move(os)), browser(std::move(browser)), device(std::move(device)) {}
 
-    rapidjson::Value to_json(rapidjson::Document::AllocatorType& allocator) override {
+    rapidjson::Value to_json(rapidjson::Document::AllocatorType &allocator) override {
         rapidjson::Value propertiesObj(rapidjson::kObjectType);
         propertiesObj.AddMember("os", rapidjson::Value(os.c_str(), allocator), allocator);
         propertiesObj.AddMember("browser", rapidjson::Value(browser.c_str(), allocator), allocator);

@@ -19,7 +19,7 @@ struct identify_event : public serializable, gateway_event_payload {
     identify_event(std::string token, int large_threshold, int intents, properties props)
         : token(std::move(token)), large_threshold(large_threshold), intents(intents), properties_(std::move(props)) {}
 
-    rapidjson::Value to_json(rapidjson::Document::AllocatorType& allocator) override {
+    rapidjson::Value to_json(rapidjson::Document::AllocatorType &allocator) override {
         rapidjson::Value identifyObj(rapidjson::kObjectType);
         identifyObj.AddMember("token", rapidjson::Value(token.c_str(), allocator), allocator);
         identifyObj.AddMember("large_threshold", large_threshold, allocator);
