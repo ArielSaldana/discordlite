@@ -7,7 +7,7 @@
 
 #include "client/discord_client_state.h"
 #include "client/websocket_client.hpp"
-#include "protocol/event_dispatcher.h"
+#include "protocol/handlers/event_handler.h"
 #include <iostream>
 #include <utility>
 
@@ -17,12 +17,9 @@ private:
     const std::string uri = "wss://gateway.discord.gg/?v=10&encoding=json";
     const std::string hostname = "gateway.discord.gg";
     discord_client_state client_state{};
-    event_dispatcher dispatcher{};
-
+    std::unique_ptr<event_handler> event_handler_;
 public:
     explicit discord_client(std::string bot_token, const discord_intents &intents);
-    void init_handlers();
-    std::string get_bot_token();
 };
 
 

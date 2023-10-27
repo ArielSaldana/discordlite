@@ -22,27 +22,27 @@ add_library(discordlite src/library.cpp
         src/client/discord_client.cpp
         src/client/discord_client.hpp
         src/client/websocket_client.hpp
-        src/protocol/event_dispatcher.cpp
-        src/models/gateway_event.h
-        src/deserializable.h
+        src/protocol/events/gateway_event.h
+        src/protocol/deserializable.h
         src/protocol/handlers/hello_handler.cpp
         src/protocol/handlers/hello_handler.h
         src/protocol/handlers/handler.cpp
         src/protocol/handlers/handler.h
-        src/deserializer.cpp
-        src/deserializer.h
+        src/protocol/deserializer.cpp
+        src/protocol/deserializer.h
         src/protocol/ping.h
-        src/opcodes_hash.cpp
-        src/opcodes_hash.h
-        src/opcodes_utilities.cpp
-        src/opcodes_utilities.h
+        src/protocol/opcodes_utilities.cpp
+        src/protocol/opcodes_utilities.h
         src/protocol/discord_intents.h
         src/client/discord_client_state.cpp
         src/client/discord_client_state.h
         src/protocol/discord_intents.cpp
         src/protocol/handlers/dispatch_handler.cpp
         src/protocol/handlers/dispatch_handler.h
-        src/models/dispatch_event.h)
+        src/protocol/events/dispatch_event.h
+        src/protocol/events/hello_event.cpp
+        src/protocol/handlers/event_handler.cpp
+        src/protocol/handlers/event_handler.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src

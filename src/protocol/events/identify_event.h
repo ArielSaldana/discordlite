@@ -5,10 +5,10 @@
 #ifndef DISCORDLITE_IDENTIFY_EVENT_H
 #define DISCORDLITE_IDENTIFY_EVENT_H
 
+#include "properties.h"
+#include "protocol/serializable.h"
 #include <iostream>
 #include <string>
-#include "properties.h"
-#include "serializable.h"
 
 struct identify_event : public serializable, gateway_event_payload {
     std::string token;

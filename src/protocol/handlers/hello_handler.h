@@ -7,21 +7,20 @@
 
 #include "client/discord_client_state.h"
 #include "handler.h"
-#include "models/gateway_event_payload.h"
-#include "models/hello_event.h"
+#include "protocol/events/hello_event.h"
+#include "protocol/gateway_event_payload.h"
 #include "protocol/ping.h"
 
-class hello_handler: public handler {
-    std::unique_ptr<ping> pinger;
+class hello_handler: public handler<hello_event> {
+    mutable std::unique_ptr<ping> pinger;
+    mutable bool is_running = false;
 public:
-    bool is_running = false;
     explicit hello_handler() = default;
     ~hello_handler() override = default;
 
-//    void process(const websocket_client &ws_client, const hello_event &hello_event);
-    void process(const discord_client_state &client_state, const gateway_event_payload &event) override;
-    void send_ready_event(const discord_client_state &client_state);
-    void start_heartbeat(const discord_client_state &client_state, int interval);
+    void process(const discord_client_state &client_state, const hello_event &event) const override;
+    void send_ready_event(const discord_client_state &client_state) const;
+    void start_heartbeat(const discord_client_state &client_state, int interval) const;
 };
 
 

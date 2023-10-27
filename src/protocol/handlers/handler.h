@@ -6,12 +6,13 @@
 #define DISCORDLITE_HANDLER_H
 
 #include "client/discord_client_state.h"
-#include "models/gateway_event_payload.h"
+#include "protocol/gateway_event_payload.h"
 
+template<typename T>
 class handler {
 public:
     virtual ~handler() = default;
-    virtual void process(const discord_client_state &client_state, const gateway_event_payload &event) = 0;
+    virtual void process(const discord_client_state &client_state, const T &event) const = 0;
 
 };
 

@@ -10,7 +10,7 @@
  * The deserializer should take in a raw string format and convert it to a gateway event object
  */
 
-#include "models/gateway_event.h"
+#include "protocol/events/gateway_event.h"
 #include "rapidjson/document.h"
 
 class deserializer {

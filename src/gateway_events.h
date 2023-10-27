@@ -1,8 +1,0 @@
-//
-// Created by Ariel Saldana on 9/27/23.
-//
-
-#ifndef DISCORDLITE_GATEWAY_EVENTS_H
-#define DISCORDLITE_GATEWAY_EVENTS_H
-
-#endif//DISCORDLITE_GATEWAY_EVENTS_H

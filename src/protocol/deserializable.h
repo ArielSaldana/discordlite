@@ -7,7 +7,7 @@
 
 #include "rapidjson/document.h"
 struct deserializable {
-    virtual void deserialize(const rapidjson::Document& document) = 0;
+    virtual void deserialize(const rapidjson::Value& param) = 0;
 };
 
 #endif//DISCORDLITE_DESERIALIZABLE_H

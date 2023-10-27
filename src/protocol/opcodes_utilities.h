@@ -5,8 +5,8 @@
 #ifndef DISCORDLITE_OPCODES_UTILITIES_H
 #define DISCORDLITE_OPCODES_UTILITIES_H
 
+#include "protocol/opcodes.h"
 #include <iostream>
-#include "opcodes.h"
 
 class opcodes_utilities {
 public:

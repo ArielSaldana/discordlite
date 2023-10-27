@@ -5,9 +5,9 @@
 #ifndef DISCORDLITE_PROPERTIES_H
 #define DISCORDLITE_PROPERTIES_H
 
+#include "protocol/serializable.h"
 #include <iostream>
 #include <string>
-#include "serializable.h"
 
 struct properties: public serializable {
     std::string os;
