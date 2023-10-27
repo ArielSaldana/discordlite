@@ -5,16 +5,16 @@
 #ifndef DISCORDLITE_AUTHOR_H
 #define DISCORDLITE_AUTHOR_H
 
+#include "protocol/deserializable.h"
 #include "protocol/serializable.h"
 #include <iostream>
 #include <string>
-#include "protocol/deserializable.h"
 
 struct author : public deserializable {
     std::string username_;
     std::string id_;
-//    author(std::string username, std::string id)
-//        : username_(std::move(username)), id_(std::move(id)) {}
+    //    author(std::string username, std::string id)
+    //        : username_(std::move(username)), id_(std::move(id)) {}
 
     void deserialize(const rapidjson::Value &value) override {
         if (value.HasMember("username") && value["username"].IsString()) {
@@ -23,7 +23,6 @@ struct author : public deserializable {
         if (value.HasMember("id") && value["id"].IsString()) {
             id_ = value["id"].GetString();
         }
-
     }
 
     const std::string &getUsername() const {

@@ -11,9 +11,10 @@
 #include "protocol/gateway_event_payload.h"
 #include "protocol/ping.h"
 
-class hello_handler: public handler<hello_event> {
+class hello_handler : public handler<hello_event> {
     mutable std::unique_ptr<ping> pinger;
     mutable bool is_running = false;
+
 public:
     explicit hello_handler() = default;
     ~hello_handler() override = default;

@@ -6,11 +6,12 @@
 #define DISCORDLITE_IDENTIFY_EVENT_H
 
 #include "properties.h"
+#include "protocol/gateway_event_payload.h"
 #include "protocol/serializable.h"
 #include <iostream>
 #include <string>
 
-struct identify_event : public serializable, gateway_event_payload {
+struct identify_event : public serializable, public gateway_event_payload {
     std::string token;
     int large_threshold;
     int intents;

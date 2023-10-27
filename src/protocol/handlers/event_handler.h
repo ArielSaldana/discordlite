@@ -7,8 +7,8 @@
 
 #include "protocol/events/dispatch_event.h"
 #include "protocol/events/hello_event.h"
-#include "protocol/handlers/dispatch/message_create_handler.h"
 #include "protocol/handlers/dispatch/interaction_create_handler.h"
+#include "protocol/handlers/dispatch/message_create_handler.h"
 #include "protocol/handlers/dispatch_handler.h"
 #include "protocol/handlers/hello_handler.h"
 

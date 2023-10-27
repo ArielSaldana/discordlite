@@ -10,7 +10,7 @@ event_handler::event_handler(discord_client_state &state) : client_state(state) 
 
 void event_handler::operator()(const dispatch_event &event, const std::optional<std::string> &event_name) const {
     if (event_name) {
-        const std::string& name = *event_name;
+        const std::string &name = *event_name;
         if (name == "MESSAGE_CREATE") {
             message_create_handle.process(client_state, event);
         } else if (name == "INTERACTION_CREATE") {
@@ -36,6 +36,6 @@ void event_handler::handle_event(const std::variant<dispatch_event, hello_event>
         } else {
             this->operator()(event);
         }
-
-    },event_variant);
+    },
+               event_variant);
 }

@@ -5,18 +5,31 @@
 #ifndef DISCORDLITE_OP_CODES_H
 #define DISCORDLITE_OP_CODES_H
 
-enum opcodes {
-    DISPATCH = 0,
-    HEARTBEAT = 1,
-    IDENTIFY = 2,
-    PRESENCE_UPDATE = 3,
-    VOICE_STATE_UPDATE = 4,
-    RESUME = 6,
-    RECONNECT = 7,
-    REQUEST_GUILD_MEMBER = 8,
-    INVALID_SESSION = 9,
-    HELLO = 10,
-    HEARTBEAT_ACK = 11
+#include <iostream>
+#include <string>
+
+class op_codes {
+private:
+    int code;
+
+public:
+    explicit op_codes(int code) : code(code) {}
+
+    static const op_codes DISPATCH;
+    static const op_codes HEARTBEAT;
+    static const op_codes IDENTIFY;
+    static const op_codes PRESENCE_UPDATE;
+    static const op_codes VOICE_STATE_UPDATE;
+    static const op_codes RESUME;
+    static const op_codes RECONNECT;
+    static const op_codes REQUEST_GUILD_MEMBER;
+    static const op_codes INVALID_SESSION;
+    static const op_codes HELLO;
+    static const op_codes HEARTBEAT_ACK;
+
+    int get_code() const;
+
+    static op_codes from_int(int value);
 };
 
 #endif//DISCORDLITE_OP_CODES_H

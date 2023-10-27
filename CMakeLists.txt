@@ -3,16 +3,19 @@ project(discordlite)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-SET (CMAKE_CXX_FLAGS_INIT                "-Wall -std=c++17")
-SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g")
-SET (CMAKE_CXX_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
-SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
-SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
-option(USE_CLANG "build application with clang" ON)
 
-if(USE_CLANG)
-    SET (...)
-endif(USE_CLANG)
+message(STATUS "C++ compiler: ${CMAKE_CXX_COMPILER}")
+
+#SET (CMAKE_CXX_FLAGS_INIT                "-Wall -std=c++17")
+#SET (CMAKE_CXX_FLAGS_DEBUG_INIT          "-g")
+#SET (CMAKE_CXX_FLAGS_MINSIZEREL_INIT     "-Os -DNDEBUG")
+#SET (CMAKE_CXX_FLAGS_RELEASE_INIT        "-O3 -DNDEBUG")
+#SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+#option(USE_CLANG "build application with clang" ON)
+#
+#if(USE_CLANG)
+#    SET (...)
+#endif(USE_CLANG)
 
 
 
@@ -43,8 +46,6 @@ add_library(discordlite src/library.cpp
         src/protocol/deserializer.cpp
         src/protocol/deserializer.h
         src/protocol/ping.h
-        src/protocol/opcodes_utilities.cpp
-        src/protocol/opcodes_utilities.h
         src/protocol/discord_intents.h
         src/client/discord_client_state.cpp
         src/client/discord_client_state.h
@@ -63,7 +64,8 @@ add_library(discordlite src/library.cpp
         src/http-client/register_slash_command.h
         src/http-client/ping_slash_command.h
         src/protocol/handlers/dispatch/interaction_create_handler.cpp
-        src/protocol/handlers/dispatch/interaction_create_handler.h)
+        src/protocol/handlers/dispatch/interaction_create_handler.h
+        src/protocol/opcodes.cpp)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src

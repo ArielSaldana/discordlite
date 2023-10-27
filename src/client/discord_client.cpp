@@ -3,12 +3,12 @@
 //
 
 #include "discord_client.hpp"
+#include "http-client/register_slash_command.h"
 #include "protocol/deserializer.h"
 #include "protocol/handlers/dispatch_handler.h"
 #include "websocket_client.hpp"
 #include <memory>
 #include <utility>
-#include "http-client/register_slash_command.h"
 
 discord_client::discord_client(std::string bot_token, const discord_intents &intents) {
     client_state.set_bot_token(std::move(bot_token));
@@ -22,9 +22,11 @@ discord_client::discord_client(std::string bot_token, const discord_intents &int
     client_state.get_ws_client()->on_connection_open([this](websocketpp::connection_hdl hdl) {
         client_state.set_is_connected(true);
     });
+
     client_state.get_ws_client()->on_connection_close([this](websocketpp::connection_hdl hdl) {
         client_state.set_is_connected(false);
     });
+
     client_state.get_ws_client()->on_message([this, &handler = this->event_handler_](const std::string &msg) {
         websocketpp::lib::error_code ec;
         auto gateway_event = deserializer::deserialize(msg);
@@ -35,5 +37,6 @@ discord_client::discord_client(std::string bot_token, const discord_intents &int
         handler->handle_event(gateway_event.d, gateway_event.t);
         //std::visit(*handler, gateway_event.d);
     });
+
     client_state.get_ws_client()->connect();
 }

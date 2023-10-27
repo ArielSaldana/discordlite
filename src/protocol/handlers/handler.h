@@ -13,7 +13,6 @@ class handler {
 public:
     virtual ~handler() = default;
     virtual void process(const discord_client_state &client_state, const T &event) const = 0;
-
 };
 
 
