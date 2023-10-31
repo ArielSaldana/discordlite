@@ -23,9 +23,9 @@ void ping_slash_command_response(const std::string &interaction_id, const std::s
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json.c_str());
 
         CURLcode res = curl_easy_perform(curl);
-        if (res != CURLE_OK)
+        if (res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-
+        }
         curl_easy_cleanup(curl);
     }
 }

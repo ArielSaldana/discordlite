@@ -21,7 +21,6 @@ discord_client::discord_client(std::string bot_token, const discord_intents &int
 
 void discord_client::get_gateway_connection_info() {
     auto gateway_bot_response_str = get_gateway_bot(client_state.get_bot_token());
-    std::cout << gateway_bot_response_str << std::endl;
     gateway_connection_info.deserialize_string(gateway_bot_response_str);
 }
 
