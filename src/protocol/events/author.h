@@ -13,8 +13,6 @@
 struct author : public deserializable {
     std::string username_;
     std::string id_;
-    //    author(std::string username, std::string id)
-    //        : username_(std::move(username)), id_(std::move(id)) {}
 
     void deserialize(const rapidjson::Value &value) override {
         if (value.HasMember("username") && value["username"].IsString()) {
