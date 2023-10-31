@@ -26,5 +26,4 @@ public:
     explicit discord_client(std::string bot_token, const discord_intents &intents);
 };
 
-
 #endif//DISCORDLITE_DISCORD_CLIENT_HPP
