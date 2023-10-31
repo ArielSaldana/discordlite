@@ -10,6 +10,7 @@
 #include "websocket_client.hpp"
 #include <memory>
 #include <utility>
+#include "utilities/protocol_url_generator.h"
 
 discord_client::discord_client(std::string bot_token, const discord_intents &intents) {
     client_state.set_bot_token(std::move(bot_token));
@@ -33,7 +34,8 @@ void discord_client::connect() {
         std::cerr << "Unable to connect, no attempts remaining" << std::endl;
     }
 
-    client_state.set_ws_client(std::make_shared<websocket_client>(gateway_connection_info.getUrl()));
+    auto const url = protocol_url_generator::generate_url(gateway_connection_info.getUrl(), "10", "json");
+    client_state.set_ws_client(std::make_shared<websocket_client>(url));
 
     event_handler_ = std::make_unique<event_handler>(this->client_state);
 
