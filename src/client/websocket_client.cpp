@@ -39,10 +39,7 @@ void websocket_client::send_message(const std::string &msg_str) {
     }
 }
 
-websocket_client::websocket_client(const std::string &ws_uri, const std::string &ws_hostname) {
-    this->ws_uri = ws_uri;
-    this->ws_tls_hostname = ws_hostname;
-
+websocket_client::websocket_client(std::string ws_uri): ws_uri(std::move(ws_uri)) {
     // Setup logging levels
     ws_client->clear_access_channels(websocketpp::log::alevel::all);
     ws_client->set_access_channels(websocketpp::log::alevel::app);
@@ -79,12 +76,12 @@ websocket_client::websocket_client(const std::string &ws_uri, const std::string 
         }
     });
 
-    ws_client->set_tls_init_handler([this, client = ws_hostname.c_str()](auto &&ws_hostname) {
-        return on_tls_init(client, std::forward<decltype(ws_hostname)>(ws_hostname));
+    ws_client->set_tls_init_handler([this](auto &&ws_hostname) {
+        return on_tls_init(std::forward<decltype(ws_hostname)>(ws_hostname));
     });
 }
 
-websocket_client::context_ptr websocket_client::on_tls_init(const char *hostname, const websocketpp::connection_hdl &) {
+websocket_client::context_ptr websocket_client::on_tls_init(const websocketpp::connection_hdl &) {
     m_tls_init = std::chrono::high_resolution_clock::now();
     context_ptr ctx = websocketpp::lib::make_shared<asio::ssl::context>(asio::ssl::context::tls_client);
 

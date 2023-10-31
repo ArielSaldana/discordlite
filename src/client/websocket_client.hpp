@@ -75,13 +75,13 @@ private:
     void on_ws_close(const websocketpp::connection_hdl &hdl);
     void on_ws_fail(const websocketpp::connection_hdl &hdl);
     void on_ws_message(const websocketpp::connection_hdl &hdl, const message_ptr &msg);
-    context_ptr on_tls_init(const char *hostname, const websocketpp::connection_hdl &);
+    context_ptr on_tls_init(const websocketpp::connection_hdl &);
 
 public:
     bool is_connected();
     void send_message(const std::string &msg_str);
     void connect();
-    explicit websocket_client(const std::string &ws_uri, const std::string &ws_hostname);
+    explicit websocket_client(std::string ws_uri);
 
     template<typename Callable>
     void on_connection_open(Callable callback) {
