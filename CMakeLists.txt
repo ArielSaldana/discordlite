@@ -65,7 +65,10 @@ add_library(discordlite src/library.cpp
         src/http-client/ping_slash_command.h
         src/protocol/handlers/dispatch/interaction_create_handler.cpp
         src/protocol/handlers/dispatch/interaction_create_handler.h
-        src/protocol/opcodes.cpp)
+        src/protocol/opcodes.cpp
+        src/http-client/get_gateway_bot_api.h
+        src/models/gateway_bot.h
+        src/models/session_start_limit.h)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
