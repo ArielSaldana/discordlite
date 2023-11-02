@@ -35,6 +35,11 @@ class discord_client_state {
     bool is_connected_ = false;
 
     /*
+     * Should the client gracefully close all connections and attempt to RESUME
+     */
+    bool should_reconnect_ = true;
+
+    /*
      * Sequence number, this comes from the 's' field sent from the gateway
      * connection. otherwise send null
      */
@@ -57,6 +62,8 @@ public:
     void set_bot_token(std::string);
     void set_ws_client(std::shared_ptr<websocket_client> ws_client);
     void set_intents(discord_intents intents);
+    void set_should_reconnect(bool value);
+    [[nodiscard]] bool get_should_reconnect() const;
     discord_intents get_intents() const;
 };
 

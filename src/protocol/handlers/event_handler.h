@@ -14,7 +14,7 @@
 
 struct event_handler {
 private:
-    discord_client_state client_state;
+    discord_client_state *client_state;
     hello_handler hello_handle{};
     dispatch_handler dispatch_handle{};
 
@@ -26,7 +26,7 @@ private:
     interaction_create_handler interaction_create_handle{};
 
 public:
-    explicit event_handler(discord_client_state &state);
+    explicit event_handler(discord_client_state *state);
     void handle_event(const std::variant<dispatch_event, hello_event> &event_variant, const std::optional<std::string> &event_name) const;
     void operator()(const dispatch_event &event, const std::optional<std::string> &event_name) const;
     void operator()(const hello_event &event) const;

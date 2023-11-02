@@ -2,15 +2,15 @@
 // Created by Ariel Saldana on 10/20/23.
 //
 
-#ifndef DISCORDLITE_PING_H
-#define DISCORDLITE_PING_H
+#ifndef DISCORDLITE_HEARTBEAT_H
+#define DISCORDLITE_HEARTBEAT_H
 
 #include <asio.hpp>
 #include <chrono>
 #include <functional>
 #include <iostream>
 
-class ping {
+class heartbeat {
 private:
     asio::io_context io_context_;
     asio::steady_timer timer_;
@@ -20,7 +20,7 @@ private:
     bool stop_requested_ = false;
 
 public:
-    ping(std::chrono::milliseconds interval, const std::function<void()> &callback)
+    heartbeat(std::chrono::milliseconds interval, const std::function<void()> &callback)
         : timer_(io_context_),
           callback_(callback),
           interval_(interval) {
@@ -31,9 +31,9 @@ public:
         start_timer();
     }
 
-    ping();
+    heartbeat();
 
-    ~ping() {
+    ~heartbeat() {
         stop();
         if (thread_ && thread_->joinable()) {
             thread_->join();
@@ -59,4 +59,4 @@ public:
     }
 };
 
-#endif//DISCORDLITE_PING_H
+#endif//DISCORDLITE_HEARTBEAT_H

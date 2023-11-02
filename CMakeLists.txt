@@ -45,7 +45,7 @@ add_library(discordlite src/library.cpp
         src/protocol/handlers/handler.h
         src/protocol/deserializer.cpp
         src/protocol/deserializer.h
-        src/protocol/ping.h
+        src/protocol/heartbeat.h
         src/protocol/discord_intents.h
         src/client/discord_client_state.cpp
         src/client/discord_client_state.h

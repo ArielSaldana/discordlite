@@ -3,6 +3,7 @@
 //
 
 #include "hello_handler.h"
+#include "client/discord_client_state.h"
 #include "handler.h"
 #include "iostream"
 #include "protocol/discord_intents.h"
@@ -14,7 +15,7 @@
 void hello_handler::process(const discord_client_state &client_state, const hello_event &event) const {
     // don't call again if this is already running
     if (is_running) {
-        std::cerr << "Attempted to begin another heartbeat thread while a thread is already running: " << std::endl;
+        client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Heartbeat is already running");
         return;
     }
 
@@ -43,12 +44,16 @@ void hello_handler::send_ready_event(const discord_client_state &client_state) c
 }
 
 void hello_handler::start_heartbeat(const discord_client_state &client_state, int interval) const {
-    pinger = std::make_unique<ping>(std::chrono::milliseconds(interval), [&client_state]() {
-        auto s = client_state.get_sequence_counter() ? std::to_string(client_state.get_sequence_counter().value()) : "null";
-        std::stringstream ss;
-        ss << R"({"op": 1,"d": )" << s << R"(})";
-        client_state.get_ws_client()->send_message(ss.str());
+    heartbeat_ = std::make_unique<heartbeat>(std::chrono::milliseconds(interval), [this, &client_state]() {
+        client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Sequence: " + std::to_string(client_state.get_sequence_counter().value_or(0)));
+        if (client_state.is_client_connected_to_gateway()) {
+            auto s = client_state.get_sequence_counter() ? std::to_string(client_state.get_sequence_counter().value()) : "null";
+            std::stringstream ss;
+            ss << R"({"op": 1,"d": )" << s << R"(})";
+            client_state.get_ws_client()->send_message(ss.str());
+        } else {
+//            this->heartbeat_->stop();
+        }
     });
-    std::cout << "Started running thread" << std::endl;
     is_running = true;
 }

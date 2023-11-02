@@ -3,7 +3,6 @@
 //
 
 #include "client/websocket_client.hpp"
-
 #include <utility>
 
 void websocket_client::on_ws_close(const websocketpp::connection_hdl &) {
@@ -46,6 +45,9 @@ websocket_client::websocket_client(std::string ws_uri): ws_uri(std::move(ws_uri)
     ws_client->set_access_channels(websocketpp::log::alevel::connect);
     ws_client->set_access_channels(websocketpp::log::alevel::disconnect);
     ws_client->set_access_channels(websocketpp::log::alevel::control);
+    ws_client->set_access_channels(websocketpp::log::alevel::debug_close);
+    ws_client->set_access_channels(websocketpp::log::alevel::debug_handshake);
+    ws_client->set_access_channels(websocketpp::log::alevel::devel);
 
     ws_client->init_asio();
 
@@ -102,7 +104,7 @@ void websocket_client::connect() {
     auto connection = ws_client->get_connection(ws_uri, ec);
 
     if (ec) {
-        std::cout << "Connect initialization error: " << ec.message() << std::endl;
+        ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection closed: Error getting connection from handle: " + ec.message());
         did_connection_fail_ = true;
         return;
     }

@@ -14,7 +14,7 @@ bool discord_client_state::is_client_connected_to_gateway() const {
 }
 
 void discord_client_state::set_sequence_counter(int value) {
-    *sequence_counter_ = value;
+    sequence_counter_ = value;
 }
 
 void discord_client_state::set_is_connected(bool connected) {
@@ -47,4 +47,12 @@ void discord_client_state::set_intents(discord_intents intents) {
 
 discord_intents discord_client_state::get_intents() const {
     return intents_;
+}
+
+void discord_client_state::set_should_reconnect(bool value) {
+    should_reconnect_ = value;
+}
+
+bool discord_client_state::get_should_reconnect() const {
+    return should_reconnect_;
 }

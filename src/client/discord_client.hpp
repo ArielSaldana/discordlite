@@ -15,7 +15,9 @@
 class discord_client {
 private:
     typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
-    discord_client_state client_state{};
+//    discord_client_state client_state{};
+//    std::shared_ptr<discord_client_state> client_state = std::make_shared<discord_client_state>();
+    std::unique_ptr<discord_client_state> client_state = std::make_unique<discord_client_state>();
     std::unique_ptr<event_handler> event_handler_;
     gateway_bot gateway_connection_info{};
     void get_gateway_connection_info();
