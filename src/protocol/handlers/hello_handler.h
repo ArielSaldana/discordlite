@@ -26,6 +26,7 @@ public:
     void process(const discord_client_state &client_state, const hello_event &event) const override;
     void send_ready_event(const discord_client_state &client_state) const;
     void start_heartbeat(const discord_client_state &client_state, int interval) const;
+    void periodically_send_heartbeat(const discord_client_state &client_state, asio::steady_timer* timer, const std::error_code& /*e*/) const;
 };
 
 

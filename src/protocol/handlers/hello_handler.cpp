@@ -12,6 +12,11 @@
 #include <chrono>
 #include <memory>
 
+#include <asio.hpp>
+#include <functional>
+#include <iostream>
+#include <thread>
+
 void hello_handler::process(const discord_client_state &client_state, const hello_event &event) const {
     // don't call again if this is already running
     if (is_running) {
@@ -43,61 +48,45 @@ void hello_handler::send_ready_event(const discord_client_state &client_state) c
     client_state.get_ws_client()->send_message(msg);
 }
 
-//void hello_handler::start_heartbeat(const discord_client_state &client_state, int interval) const {
-//    heartbeat_ = std::make_unique<heartbeat>(std::chrono::milliseconds(interval), [this, &client_state]() {
-//        client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Sequence from heartbeat: " + std::to_string(client_state.get_sequence_counter().value_or(0)));
-//        if (client_state.is_client_connected_to_gateway()) {
-//            auto s = client_state.get_sequence_counter() ? std::to_string(client_state.get_sequence_counter().value()) : "null";
-//            std::stringstream ss;
-//            ss << R"({"op": 1,"d": )" << s << R"(})";
-//            client_state.get_ws_client()->send_message(ss.str());
-//        } else {
-//            client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::debug_close, "Stopping heartbeat");
-//            this->heartbeat_->stop();
-//        }
-//    });
-//    is_running = true;
-//}
-
 void hello_handler::start_heartbeat(const discord_client_state &client_state, int interval) const {
-    // Safety check to prevent re-entrance
-    if (is_running) {
-        client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Attempted to start heartbeat while already running");
-        return;
-    }
 
-    try {
-        heartbeat_ = std::make_unique<heartbeat>(std::chrono::milliseconds(interval), [this, &client_state]() {
-            try {
-                // Your current heartbeat logic here...
+    // Any program that uses ASIO need to have at least one io_context object
+    asio::io_context io;
 
-                // Check if client is connected
-                if (!client_state.is_client_connected_to_gateway()) {
-                    throw std::runtime_error("Client disconnected from gateway");
-                }
-            } catch (const std::exception& e) {
-                // Log the exception
-                std::stringstream ss;
-                ss << "Error during heartbeat: " << e.what();
-                client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, ss.str());
+    // Create a steady_timer instance, setting its expiry time 3 seconds from now
+    asio::steady_timer timer(io, asio::chrono::seconds(3));
 
-                // Handle the error, for example by stopping the heartbeat
-                heartbeat_->stop();
-                is_running = false;
+    // Set the timer to execute the periodic_task function
+    timer.async_wait([this, capture0 = &timer, &client_state](auto &&PH1) { return periodically_send_heartbeat(client_state, capture0, std::forward<decltype(PH1)>(PH1)); });
 
-                // Possibly attempt to reconnect or restart the heartbeat...
-            }
-        });
+    // Run the io_context in a separate thread
+    std::thread t([&io]() { io.run(); });
 
-        is_running = true;
-    } catch (const std::exception& e) {
-        // Log that we failed to start the heartbeat
+    // Do other things in the main thread if needed...
+
+    // Wait for the thread to finish
+
+    t.detach();
+    //t.join();
+}
+void hello_handler::periodically_send_heartbeat(const discord_client_state &client_state, asio::steady_timer *timer, const std::error_code & /*e*/) const {
+    std::cout << "Task executed every 3 seconds." << std::endl;
+
+    client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Sequence from heartbeat: " + std::to_string(client_state.get_sequence_counter().value_or(0)));
+    if (client_state.is_client_connected_to_gateway()) {
+        auto s = client_state.get_sequence_counter() ? std::to_string(client_state.get_sequence_counter().value()) : "null";
         std::stringstream ss;
-        ss << "Failed to start heartbeat: " << e.what();
-        client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, ss.str());
-
-        // Reset the heartbeat pointer and the running flag
-        heartbeat_.reset();
-        is_running = false;
+        ss << R"({"op": 1,"d": )" << s << R"(})";
+        client_state.get_ws_client()->send_message(ss.str());
+    } else {
+        client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::debug_close, "Stopping heartbeat");
+        this->heartbeat_->stop();
     }
+    is_running = true;
+
+    // Reschedule the timer for another 3 seconds in the future
+    timer->expires_at(timer->expiry() + asio::chrono::seconds(3));
+
+    // Posts the timer event again
+    timer->async_wait([this, timer, &client_state](auto &&PH1) { return periodically_send_heartbeat(client_state, timer, std::forward<decltype(PH1)>(PH1)); });
 }
