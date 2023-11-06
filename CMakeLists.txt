@@ -33,7 +33,7 @@ find_package(websocketpp CONFIG REQUIRED)
 find_package(CURL CONFIG REQUIRED)
 
 # Create discordlite library
-add_library(discordlite src/library.cpp
+add_library(discordlite
         src/client/websocket_client.cpp
         src/client/discord_client.cpp
         src/client/discord_client.hpp
