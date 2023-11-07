@@ -56,7 +56,6 @@ void discord_client::connect() {
     });
 
     client_state->get_ws_client()->on_message([this, &handler = this->event_handler_, &state = this->client_state](const std::string &msg) {
-        websocketpp::lib::error_code ec;
         auto gateway_event = deserializer::deserialize(msg);
         if (gateway_event.s) {
             std::cout << "s is:" << gateway_event.s << std::endl;
