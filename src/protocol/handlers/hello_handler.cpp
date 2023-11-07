@@ -49,26 +49,21 @@ void hello_handler::send_ready_event(const discord_client_state &client_state) c
 }
 
 void hello_handler::start_heartbeat(const discord_client_state &client_state, int interval) const {
-
-    // Any program that uses ASIO need to have at least one io_context object
-    asio::io_context io;
-
-    // Create a steady_timer instance, setting its expiry time 3 seconds from now
-    asio::steady_timer timer(io, asio::chrono::seconds(3));
-
-    // Set the timer to execute the periodic_task function
-    timer.async_wait([this, capture0 = &timer, &client_state](auto &&PH1) { return periodically_send_heartbeat(client_state, capture0, std::forward<decltype(PH1)>(PH1)); });
-
-    // Run the io_context in a separate thread
-    std::thread t([&io]() { io.run(); });
-
-    // Do other things in the main thread if needed...
-
-    // Wait for the thread to finish
-
-    t.detach();
-    //t.join();
+    heartbeat_ = std::make_unique<heartbeat>(std::chrono::milliseconds(3000), [this, &client_state]() {
+        client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Sequence from heartbeat: " + std::to_string(client_state.get_sequence_counter().value_or(0)));
+        if (client_state.is_client_connected_to_gateway()) {
+            auto s = client_state.get_sequence_counter() ? std::to_string(client_state.get_sequence_counter().value()) : "null";
+            std::stringstream ss;
+            ss << R"({"op": 1,"d": )" << s << R"(})";
+            client_state.get_ws_client()->send_message(ss.str());
+        } else {
+            client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::debug_close, "Stopping heartbeat");
+            this->heartbeat_->stop();
+        }
+    });
+    is_running = true;
 }
+
 void hello_handler::periodically_send_heartbeat(const discord_client_state &client_state, asio::steady_timer *timer, const std::error_code & /*e*/) const {
     std::cout << "Task executed every 3 seconds." << std::endl;
 

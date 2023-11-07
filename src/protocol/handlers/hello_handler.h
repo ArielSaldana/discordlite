@@ -18,6 +18,7 @@ class hello_handler : public handler<hello_event> {
 public:
     explicit hello_handler() = default;
     ~hello_handler() override {
+        std::cout << "deleting(de-referencing) hello_handler" << std::endl;
         if (heartbeat_) {
             heartbeat_->stop();
         }
