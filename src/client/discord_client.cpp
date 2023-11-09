@@ -62,7 +62,6 @@ void discord_client::connect() {
             state->set_sequence_counter(gateway_event.s);
         }
 
-        state->get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Sequence from client: " + std::to_string(state->get_sequence_counter().value_or(0)));
         handler->handle_event(gateway_event.d, gateway_event.t);
     });
 

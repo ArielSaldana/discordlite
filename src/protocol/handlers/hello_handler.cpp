@@ -48,7 +48,6 @@ void hello_handler::start_heartbeat(const discord_client_state &client_state, in
     auto &io_context = client_state.get_ws_client()->get_client()->get_io_service();
     heartbeat_ = std::make_unique<heartbeat>(io_context, std::chrono::milliseconds(interval), [this, &client_state]() {
         is_running = true;
-        client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Sequence from heartbeat: " + std::to_string(client_state.get_sequence_counter().value_or(0)));
         if (client_state.is_client_connected_to_gateway()) {
             auto s = client_state.get_sequence_counter() ? std::to_string(client_state.get_sequence_counter().value()) : "null";
             std::stringstream ss;
@@ -64,7 +63,6 @@ void hello_handler::start_heartbeat(const discord_client_state &client_state, in
 void hello_handler::periodically_send_heartbeat(const discord_client_state &client_state, asio::steady_timer *timer, const std::error_code & /*e*/) const {
     std::cout << "Task executed every 3 seconds." << std::endl;
 
-    client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Sequence from heartbeat: " + std::to_string(client_state.get_sequence_counter().value_or(0)));
     if (client_state.is_client_connected_to_gateway()) {
         auto s = client_state.get_sequence_counter() ? std::to_string(client_state.get_sequence_counter().value()) : "null";
         std::stringstream ss;
