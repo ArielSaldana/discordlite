@@ -8,11 +8,9 @@
 #include <string>
 
 int main() {
-    const bool yes = true;
-    const char *bot_token = std::getenv("BOT_TOKEN");
-    if (bot_token) {
-        std::string token = bot_token;// Convert to std::string for ease of use
-        discord_intents combined_intents = {
+    if (const char *bot_token = std::getenv("BOT_TOKEN")) {
+        const std::string token = bot_token;// Convert to std::string for ease of use
+        const discord_intents combined_intents = {
                 discord_intents::GUILDS,
                 discord_intents::GUILD_MEMBERS,
                 discord_intents::GUILD_MESSAGES,
@@ -32,3 +30,4 @@ int main() {
     }
     return 0;
 }
+
