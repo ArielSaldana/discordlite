@@ -4,7 +4,6 @@
 
 #include "hello_handler.h"
 #include "client/discord_client_state.h"
-#include "handler.h"
 #include "iostream"
 #include "protocol/discord_intents.h"
 #include "protocol/events/gateway_event.h"
