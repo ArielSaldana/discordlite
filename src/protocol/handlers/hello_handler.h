@@ -8,7 +8,6 @@
 #include "client/discord_client_state.h"
 #include "handler.h"
 #include "protocol/events/hello_event.h"
-#include "protocol/gateway_event_payload.h"
 #include "protocol/heartbeat.h"
 
 class hello_handler : public handler<hello_event> {

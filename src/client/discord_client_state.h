@@ -52,10 +52,12 @@ class discord_client_state {
 
 
 public:
-    [[nodiscard]] bool is_client_connected_to_gateway() const;
-    [[nodiscard]] std::string get_bot_token() const;
-    [[nodiscard]] websocket_client *get_ws_client() const;
-    [[nodiscard]] std::optional<int> get_sequence_counter() const;
+    [[nodiscard]] auto is_client_connected_to_gateway() const -> bool;
+    [[nodiscard]] auto get_bot_token() const -> std::string;
+    [[nodiscard]] auto get_ws_client() const -> websocket_client *;
+    [[nodiscard]] auto get_sequence_counter() const -> std::optional<int>;
+    [[nodiscard]] auto get_should_reconnect() const -> bool;
+    [[nodiscard]] auto get_intents() const -> discord_intents;
     void set_sequence_counter(int value);
     void set_is_connected(bool connected);
     void clear_bot_token();
@@ -63,8 +65,6 @@ public:
     void set_ws_client(std::shared_ptr<websocket_client> ws_client);
     void set_intents(discord_intents intents);
     void set_should_reconnect(bool value);
-    [[nodiscard]] bool get_should_reconnect() const;
-    discord_intents get_intents() const;
 };
 
 

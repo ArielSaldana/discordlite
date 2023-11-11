@@ -20,11 +20,11 @@ discord_client::discord_client(std::string bot_token, const discord_intents &int
 }
 
 void discord_client::get_gateway_connection_info() {
-    auto gateway_bot_response_str = get_gateway_bot(client_state->get_bot_token());
+    const auto gateway_bot_response_str = get_gateway_bot(client_state->get_bot_token());
     gateway_connection_info.deserialize_string(gateway_bot_response_str);
 }
 
-bool discord_client::can_connect_to_gateway() {
+auto discord_client::can_connect_to_gateway() -> bool {
     return gateway_connection_info.getSessionStartLimit().getRemaining() != 0;
 }
 
@@ -57,11 +57,9 @@ void discord_client::connect() {
 
     client_state->get_ws_client()->on_message([this, &handler = this->event_handler_, &state = this->client_state](const std::string &msg) {
         auto gateway_event = deserializer::deserialize(msg);
-        if (gateway_event.s) {
-            std::cout << "s is:" << gateway_event.s << std::endl;
+        if (gateway_event.s != 0) {
             state->set_sequence_counter(gateway_event.s);
         }
-
         handler->handle_event(gateway_event.d, gateway_event.t);
     });
 

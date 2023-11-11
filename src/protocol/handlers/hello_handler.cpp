@@ -9,7 +9,6 @@
 #include "protocol/events/gateway_event.h"
 #include "protocol/events/identify_event.h"
 #include <chrono>
-#include <memory>
 #include <asio.hpp>
 #include <thread>
 

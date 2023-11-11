@@ -3,13 +3,12 @@
 //
 
 #include "discord_client_state.h"
-#include <utility>
 
-std::optional<int> discord_client_state::get_sequence_counter() const {
+auto discord_client_state::get_sequence_counter() const -> std::optional<int> {
     return sequence_counter_;
 }
 
-bool discord_client_state::is_client_connected_to_gateway() const {
+auto discord_client_state::is_client_connected_to_gateway() const -> bool {
     return is_connected_;
 }
 
@@ -21,7 +20,7 @@ void discord_client_state::set_is_connected(bool connected) {
     is_connected_ = connected;
 }
 
-std::string discord_client_state::get_bot_token() const {
+auto discord_client_state::get_bot_token() const -> std::string {
     return bot_token_;
 }
 
@@ -33,7 +32,7 @@ void discord_client_state::set_bot_token(std::string bot_token) {
     bot_token_ = std::move(bot_token);
 }
 
-websocket_client *discord_client_state::get_ws_client() const {
+auto discord_client_state::get_ws_client() const -> websocket_client * {
     return ws_client_.get();
 }
 
@@ -45,7 +44,7 @@ void discord_client_state::set_intents(discord_intents intents) {
     this->intents_ = intents;
 }
 
-discord_intents discord_client_state::get_intents() const {
+auto discord_client_state::get_intents() const -> discord_intents {
     return intents_;
 }
 
@@ -53,6 +52,6 @@ void discord_client_state::set_should_reconnect(bool value) {
     should_reconnect_ = value;
 }
 
-bool discord_client_state::get_should_reconnect() const {
+auto discord_client_state::get_should_reconnect() const -> bool {
     return should_reconnect_;
 }

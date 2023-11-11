@@ -10,19 +10,16 @@
 #include "models/gateway_bot.h"
 #include "protocol/handlers/event_handler.h"
 #include <iostream>
-#include <utility>
 
 class discord_client {
 private:
-    typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
-//    discord_client_state client_state{};
-//    std::shared_ptr<discord_client_state> client_state = std::make_shared<discord_client_state>();
+    using client = websocketpp::client<websocketpp::config::asio_tls_client>;
     std::unique_ptr<discord_client_state> client_state = std::make_unique<discord_client_state>();
     std::unique_ptr<event_handler> event_handler_;
     gateway_bot gateway_connection_info{};
     void get_gateway_connection_info();
     void connect();
-    bool can_connect_to_gateway();
+    auto can_connect_to_gateway() -> bool;
 
 public:
     explicit discord_client(std::string bot_token, const discord_intents &intents);

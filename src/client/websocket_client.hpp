@@ -9,16 +9,15 @@
 #define _WEBSOCKETPP_CPP11_THREAD_ 1
 
 #include <iostream>
-#include <mutex>
 #include <websocketpp/client.hpp>
 #include <websocketpp/config/asio_client.hpp>
 
-typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
-typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
+using client = websocketpp::client<websocketpp::config::asio_tls_client>;
+using message_ptr = websocketpp::config::asio_client::message_type::ptr;
 class websocket_client {
 private:
-    typedef websocketpp::lib::lock_guard<websocketpp::lib::mutex> scoped_lock;
-    typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
+    using scoped_lock = websocketpp::lib::lock_guard<websocketpp::lib::mutex>;
+    using context_ptr = websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context>;
 
     /*
      * Set to true if the connection has failed
@@ -75,10 +74,10 @@ private:
     void on_ws_close(const websocketpp::connection_hdl &hdl);
     void on_ws_fail(const websocketpp::connection_hdl &hdl);
     void on_ws_message(const websocketpp::connection_hdl &hdl, const message_ptr &msg);
-    context_ptr on_tls_init(const websocketpp::connection_hdl &);
+    auto on_tls_init(const websocketpp::connection_hdl &) -> context_ptr;
 
 public:
-    bool is_connected();
+    auto is_connected() -> bool;
     void send_message(const std::string &msg_str);
     void connect();
     explicit websocket_client(std::string ws_uri);
@@ -103,7 +102,7 @@ public:
         this->on_message_cb_trigger = std::forward<Callable>(callback);
     }
 
-    client *get_client() {
+    auto get_client() -> client * {
         return ws_client.get();
     }
 };

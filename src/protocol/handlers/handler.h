@@ -6,7 +6,6 @@
 #define DISCORDLITE_HANDLER_H
 
 #include "client/discord_client_state.h"
-#include "protocol/gateway_event_payload.h"
 
 template<typename T>
 class handler {

@@ -101,7 +101,7 @@ websocket_client::context_ptr websocket_client::on_tls_init(const websocketpp::c
 
 void websocket_client::connect() {
     websocketpp::lib::error_code ec;
-    auto connection = ws_client->get_connection(ws_uri, ec);
+    const auto connection = ws_client->get_connection(ws_uri, ec);
 
     if (ec) {
         ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection closed: Error getting connection from handle: " + ec.message());

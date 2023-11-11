@@ -35,6 +35,5 @@ void event_handler::handle_event(const std::variant<dispatch_event, hello_event>
         } else {
             this->operator()(event);
         }
-    },
-               event_variant);
+    }, event_variant);
 }
