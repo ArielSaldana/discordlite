@@ -12,7 +12,7 @@
 #include <asio.hpp>
 #include <thread>
 
-void hello_handler::process(const discord_client_state &client_state, const hello_event &event) const {
+void hello_handler::process(discord_client_state &client_state, const hello_event &event) const {
     // don't call again if this is already running
     if (is_running) {
         client_state.get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::app, "Heartbeat is already running");

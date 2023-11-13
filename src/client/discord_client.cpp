@@ -6,17 +6,13 @@
 #include "http-client/get_gateway_bot_api.h"
 #include "http-client/register_slash_command.h"
 #include "protocol/deserializer.h"
-#include "protocol/handlers/dispatch_handler.h"
 #include "utilities/protocol_url_generator.h"
 #include "websocket_client.hpp"
-#include <memory>
-#include <utility>
 
 discord_client::discord_client(std::string bot_token, const discord_intents &intents) {
     client_state->set_bot_token(std::move(bot_token));
     client_state->set_intents(intents);
     get_gateway_connection_info();
-    connect();
 }
 
 void discord_client::get_gateway_connection_info() {
@@ -28,18 +24,7 @@ auto discord_client::can_connect_to_gateway() -> bool {
     return gateway_connection_info.getSessionStartLimit().getRemaining() != 0;
 }
 
-void discord_client::connect() {
-    if (!can_connect_to_gateway()) {
-        std::cerr << "Unable to connect, no attempts remaining" << std::endl;
-    }
-
-    auto const url = protocol_url_generator::generate_url(gateway_connection_info.getUrl(), "10", "json");
-    client_state->set_ws_client(std::make_shared<websocket_client>(url));
-
-    event_handler_ = std::make_unique<event_handler>(client_state.get());
-
-    register_slash_command(client_state->get_bot_token(), "1156420471013777580", "642866879916146699");
-
+void discord_client::init_ws_client_events() {
     client_state->get_ws_client()->on_connection_open([this](websocketpp::connection_hdl hdl) {
         client_state->set_is_connected(true);
     });
@@ -53,6 +38,9 @@ void discord_client::connect() {
         client_state->get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::debug_close, "Connection Closed");
         client_state->get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::debug_close, "Status Code: " + std::to_string(status_code));
         client_state->get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::debug_close, "Close message:: " + reason);
+
+        std::cerr << "Attempting to reconnect\n";
+        connect(true);
     });
 
     client_state->get_ws_client()->on_message([this, &handler = this->event_handler_, &state = this->client_state](const std::string &msg) {
@@ -62,6 +50,34 @@ void discord_client::connect() {
         }
         handler->handle_event(gateway_event.d, gateway_event.t);
     });
-
-    client_state->get_ws_client()->connect();
 }
+void discord_client::connect(const bool should_resume) {
+    if (!can_connect_to_gateway()) {
+        should_client_reconnect_ = false;
+        std::cerr << "Unable to connect, no attempts remaining" << std::endl;
+    }
+
+    std::string url;
+
+    if (should_resume) {
+        url = protocol_url_generator::generate_url(client_state->get_resume_url(), "10", "json");
+    } else {
+        url = protocol_url_generator::generate_url(gateway_connection_info.getUrl(), "10", "json");
+    }
+
+    client_state->set_ws_client(std::make_shared<websocket_client>(url));
+    event_handler_ = std::make_unique<event_handler>(client_state.get());
+
+    register_slash_command(client_state->get_bot_token(), "1156420471013777580", "642866879916146699");
+
+    init_ws_client_events();
+
+    do {
+        client_state->get_ws_client()->connect();
+    } while (should_client_reconnect_);
+}
+
+void discord_client::set_should_client_reconnect(const bool should_reconnect) {
+    should_client_reconnect_ = should_reconnect;
+}
+

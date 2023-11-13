@@ -14,6 +14,8 @@ void event_handler::operator()(const dispatch_event &event, const std::optional<
             message_create_handle.process(*client_state, event);
         } else if (name == "INTERACTION_CREATE") {
             interaction_create_handle.process(*client_state, event);
+        } else if (name == "READY") {
+            ready_handler_.process(*client_state, event);
         } else {
             client_state->get_ws_client()->get_client()->get_alog().write(websocketpp::log::alevel::devel, "Unknown event name:" + name);
             dispatch_handle.process(*client_state, event);

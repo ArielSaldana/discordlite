@@ -7,10 +7,13 @@
 
 #include "protocol/events/dispatch_event.h"
 #include "protocol/events/hello_event.h"
+#include "protocol/events/ready_event.h"
 #include "protocol/handlers/dispatch/interaction_create_handler.h"
 #include "protocol/handlers/dispatch/message_create_handler.h"
+#include "protocol/handlers/dispatch/ready_handler.h"
 #include "protocol/handlers/dispatch_handler.h"
 #include "protocol/handlers/hello_handler.h"
+
 
 struct event_handler {
 private:
@@ -24,6 +27,7 @@ private:
      */
     message_create_handler message_create_handle{};
     interaction_create_handler interaction_create_handle{};
+    ready_handler ready_handler_{};
 
 public:
     explicit event_handler(discord_client_state *state);

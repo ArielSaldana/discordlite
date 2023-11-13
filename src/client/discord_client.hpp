@@ -18,10 +18,15 @@ private:
     std::unique_ptr<event_handler> event_handler_;
     gateway_bot gateway_connection_info{};
     void get_gateway_connection_info();
-    void connect();
+    void init_ws_client_events();
     auto can_connect_to_gateway() -> bool;
 
+    // add a function
+    bool should_client_reconnect_ = true;
+
 public:
+    void connect(bool should_resume = false);
+    void set_should_client_reconnect(bool should_reconnect);
     explicit discord_client(std::string bot_token, const discord_intents &intents);
 };
 

@@ -10,7 +10,7 @@
 #include "protocol/handlers/handler.h"
 
 struct message_create_handler : dispatch_handler {
-    void process(const discord_client_state &client_state, const dispatch_event &event) const override;
+    void process(discord_client_state &client_state, const dispatch_event &event) const override;
 };
 
 

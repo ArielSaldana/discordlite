@@ -17,6 +17,7 @@ int main() {
                 discord_intents::MESSAGE_CONTENT,
                 discord_intents::AUTO_MODERATION_EXECUTION};
         discord_client client(token, combined_intents);
+        client.connect();
 
         // other bot api shit
 

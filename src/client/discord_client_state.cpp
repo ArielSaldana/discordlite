@@ -47,6 +47,9 @@ void discord_client_state::set_intents(discord_intents intents) {
 auto discord_client_state::get_intents() const -> discord_intents {
     return intents_;
 }
+auto discord_client_state::get_resume_url() const -> std::string {
+    return *resume_url_;
+}
 
 void discord_client_state::set_should_reconnect(bool value) {
     should_reconnect_ = value;
@@ -55,3 +58,8 @@ void discord_client_state::set_should_reconnect(bool value) {
 auto discord_client_state::get_should_reconnect() const -> bool {
     return should_reconnect_;
 }
+
+void discord_client_state::set_resume_url(std::string value) {
+    resume_url_ = value;
+}
+

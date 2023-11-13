@@ -39,7 +39,7 @@ std::vector<std::string_view> glados_quotes() {
     return quotes;
 }
 
-void message_create_handler::process(const discord_client_state &client_state, const dispatch_event &event) const {
+void message_create_handler::process(discord_client_state &client_state, const dispatch_event &event) const {
     if (event.getAuthor()->getId() != "1156420471013777580" && event.getContent().value().contains("manboober")) {
         const std::vector<std::string_view> &quotes = glados_quotes();
 

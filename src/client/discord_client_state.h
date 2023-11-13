@@ -50,6 +50,11 @@ class discord_client_state {
      */
     discord_intents intents_{};
 
+    /*
+     * Resume url
+     */
+    std::optional<std::string> resume_url_{};
+
 
 public:
     [[nodiscard]] auto is_client_connected_to_gateway() const -> bool;
@@ -58,6 +63,7 @@ public:
     [[nodiscard]] auto get_sequence_counter() const -> std::optional<int>;
     [[nodiscard]] auto get_should_reconnect() const -> bool;
     [[nodiscard]] auto get_intents() const -> discord_intents;
+    [[nodiscard]] auto get_resume_url() const -> std::string;
     void set_sequence_counter(int value);
     void set_is_connected(bool connected);
     void clear_bot_token();
@@ -65,6 +71,7 @@ public:
     void set_ws_client(std::shared_ptr<websocket_client> ws_client);
     void set_intents(discord_intents intents);
     void set_should_reconnect(bool value);
+    void set_resume_url(std::string value);
 };
 
 

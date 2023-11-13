@@ -30,25 +30,40 @@ void dispatch_event::deserialize(const rapidjson::Value &value) {
     if (value.HasMember("type") && value["type"].IsInt()) {
         type_ = value["type"].GetInt();
     }
+
+    if (value.HasMember("session_id") && value["session_id"].IsString()) {
+        session_id_ = value["session_id"].GetString();
+    }
+
+    if (value.HasMember("session_type") && value["session_type"].IsString()) {
+        session_type_ = value["session_type"].GetString();
+    }
+
+    if (value.HasMember("resume_gateway_url") && value["resume_gateway_url"].IsString()) {
+        resume_gateway_url_ = value["resume_gateway_url"].GetString();
+    }
 }
-const std::optional<std::string> &dispatch_event::getGuildId() const {
+auto dispatch_event::getGuildId() const -> const std::optional<std::string> & {
     return guild_id_;
 }
-const std::optional<std::string> &dispatch_event::getContent() const {
+auto dispatch_event::getContent() const -> const std::optional<std::string> & {
     return content_;
 }
-const std::optional<std::string> &dispatch_event::getChannelId() const {
+auto dispatch_event::getChannelId() const -> const std::optional<std::string> & {
     return channel_id_;
 }
-const std::optional<author> &dispatch_event::getAuthor() const {
+auto dispatch_event::getAuthor() const -> const std::optional<author> & {
     return author_;
 }
-const std::optional<std::string> &dispatch_event::getToken() const {
+auto dispatch_event::getToken() const -> const std::optional<std::string> & {
     return token_;
 }
-const std::optional<std::string> &dispatch_event::getId() const {
+auto dispatch_event::getId() const -> const std::optional<std::string> & {
     return id_;
 }
-const std::optional<int> &dispatch_event::getType() const {
+auto dispatch_event::getType() const -> const std::optional<int> & {
     return type_;
+}
+auto dispatch_event::get_resume_url() const -> const std::optional<std::string> & {
+    return resume_gateway_url_;
 }

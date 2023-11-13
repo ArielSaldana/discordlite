@@ -7,11 +7,7 @@
 
 #include "dispatch_event.h"
 #include "hello_event.h"
-#include "protocol/gateway_event_payload.h"
-#include <iostream>
-#include <rapidjson/document.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
+#include "ready_event.h"
 #include <variant>
 
 struct gateway_event {

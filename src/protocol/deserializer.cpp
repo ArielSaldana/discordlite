@@ -6,7 +6,7 @@
 #include "opcodes.h"
 #include "protocol/events/hello_event.h"
 
-gateway_event deserializer::deserialize(const rapidjson::Document &doc) {
+auto deserializer::deserialize(const rapidjson::Document &doc) -> gateway_event {
     gateway_event gwe{};
 
     if (doc.IsObject()) {
@@ -37,7 +37,7 @@ gateway_event deserializer::deserialize(const rapidjson::Document &doc) {
     return gwe;
 }
 
-gateway_event deserializer::deserialize(const std::string &msg) {
+auto deserializer::deserialize(const std::string &msg) -> gateway_event {
     rapidjson::Document d;
     d.Parse(msg.c_str());
     return deserialize(d);

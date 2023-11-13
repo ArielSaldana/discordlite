@@ -12,6 +12,7 @@
 #include <optional>
 
 struct dispatch_event : public gateway_event_payload, public deserializable {
+private:
     std::optional<std::string> guild_id_;
     std::optional<std::string> content_;
     std::optional<std::string> channel_id_;
@@ -19,14 +20,20 @@ struct dispatch_event : public gateway_event_payload, public deserializable {
     std::optional<std::string> token_;
     std::optional<std::string> id_;
     std::optional<int> type_;
+    // ready event
+    std::optional<std::string> session_id_;
+    std::optional<std::string> session_type_;
+    std::optional<std::string> resume_gateway_url_;
 
-    [[nodiscard]] const std::optional<std::string> &getChannelId() const;
-    [[nodiscard]] const std::optional<std::string> &getGuildId() const;
-    [[nodiscard]] const std::optional<author> &getAuthor() const;
-    [[nodiscard]] const std::optional<std::string> &getContent() const;
-    [[nodiscard]] const std::optional<std::string> &getToken() const;
-    [[nodiscard]] const std::optional<std::string> &getId() const;
-    [[nodiscard]] const std::optional<int> &getType() const;
+public:
+    [[nodiscard]] auto getChannelId() const -> const std::optional<std::string> &;
+    [[nodiscard]] auto getGuildId() const -> const std::optional<std::string> &;
+    [[nodiscard]] auto getAuthor() const -> const std::optional<author> &;
+    [[nodiscard]] auto getContent() const -> const std::optional<std::string> &;
+    [[nodiscard]] auto getToken() const -> const std::optional<std::string> &;
+    [[nodiscard]] auto getId() const -> const std::optional<std::string> &;
+    [[nodiscard]] auto getType() const -> const std::optional<int> &;
+    [[nodiscard]] auto get_resume_url() const -> const std::optional<std::string> &;
 
     void deserialize(const rapidjson::Value &value) override;
 };

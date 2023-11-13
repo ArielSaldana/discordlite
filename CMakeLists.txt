@@ -70,7 +70,11 @@ add_library(discordlite
         src/models/gateway_bot.h
         src/models/session_start_limit.h
         src/utilities/protocol_url_generator.cpp
-        src/utilities/protocol_url_generator.h)
+        src/utilities/protocol_url_generator.h
+        src/protocol/events/ready_event.h
+        src/protocol/handlers/dispatch/ready_handler.cpp
+        src/protocol/handlers/dispatch/ready_handler.h
+)
 target_include_directories(discordlite
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
