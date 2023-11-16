@@ -7,7 +7,6 @@
 
 #include "protocol/deserializable.h"
 #include "protocol/serializable.h"
-#include <iostream>
 #include <string>
 
 struct author : public deserializable {
