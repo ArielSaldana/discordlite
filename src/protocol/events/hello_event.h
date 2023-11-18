@@ -7,7 +7,6 @@
 
 #include "protocol/deserializable.h"
 #include "protocol/gateway_event_payload.h"
-#include <iostream>
 
 struct hello_event : public gateway_event_payload, public deserializable {
     void deserialize(const rapidjson::Value &value) override;
