@@ -8,9 +8,12 @@
 #include "protocol/deserializable.h"
 #include "protocol/events/author.h"
 #include "protocol/gateway_event_payload.h"
-#include <iostream>
 #include <optional>
 
+/*
+ * TODO: Consider if this should be a single object with many optional fields
+ * or subclasses with only the required fields
+ */
 struct dispatch_event : public gateway_event_payload, public deserializable {
 private:
     std::optional<std::string> guild_id_;
