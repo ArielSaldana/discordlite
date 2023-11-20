@@ -7,7 +7,6 @@
 
 #include "protocol/deserializable.h"
 #include "protocol/gateway_event_payload.h"
-#include <iostream>
 #include <string>
 
 class ready_event final : public gateway_event_payload, public deserializable {
