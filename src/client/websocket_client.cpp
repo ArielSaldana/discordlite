@@ -3,7 +3,6 @@
 //
 
 #include "client/websocket_client.hpp"
-#include <utility>
 
 void websocket_client::on_ws_close(const websocketpp::connection_hdl &) {
     ws_client->get_alog().write(websocketpp::log::alevel::app, "Connection Closed");

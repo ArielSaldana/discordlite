@@ -5,7 +5,6 @@
 #include "message_create_handler.h"
 #include "http-client/send_message.h"
 #include "protocol/events/dispatch_event.h"
-#include <iostream>
 #include <random>
 #include <string_view>
 #include <vector>
