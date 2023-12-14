@@ -22,23 +22,18 @@ void dispatch_event::deserialize(const rapidjson::Value &value) {
     if (value.HasMember("id") && value["id"].IsString()) {
         id_ = value["id"].GetString();
     }
-
     if (value.HasMember("token") && value["token"].IsString()) {
         token_ = value["token"].GetString();
     }
-
     if (value.HasMember("type") && value["type"].IsInt()) {
         type_ = value["type"].GetInt();
     }
-
     if (value.HasMember("session_id") && value["session_id"].IsString()) {
         session_id_ = value["session_id"].GetString();
     }
-
     if (value.HasMember("session_type") && value["session_type"].IsString()) {
         session_type_ = value["session_type"].GetString();
     }
-
     if (value.HasMember("resume_gateway_url") && value["resume_gateway_url"].IsString()) {
         resume_gateway_url_ = value["resume_gateway_url"].GetString();
     }
