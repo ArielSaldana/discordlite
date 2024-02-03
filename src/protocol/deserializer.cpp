@@ -7,34 +7,39 @@
 #include "protocol/events/hello_event.h"
 
 auto deserializer::deserialize(const rapidjson::Document &doc) -> gateway_event {
-    gateway_event gwe{};
+    gateway_event gateway_ev{};
 
     if (doc.IsObject()) {
         if (doc.HasMember("op")) {
-            gwe.op = doc["op"].GetInt();
+            gateway_ev.op = doc["op"].GetInt();
+
+            /* s and t are null when op is not 0 */
+            if (gateway_ev.op == op_codes::DISPATCH.get_code()) {
+                if (doc.HasMember("s") && !doc["s"].IsNull()) {
+                    gateway_ev.s = doc["s"].GetInt();
+                }
+                if (doc.HasMember("t") && !doc["t"].IsNull()) {
+                    gateway_ev.t = doc["t"].GetString();
+                }
+            }
         }
-        if (doc.HasMember("s") && !doc["s"].IsNull()) {
-            gwe.s = doc["s"].GetInt();
-        }
-        if (doc.HasMember("t") && !doc["t"].IsNull()) {
-            gwe.t = doc["t"].GetString();
-        }
+
         if (doc.HasMember("d") && doc["d"].IsObject()) {
             auto &gv = doc["d"];
             auto obj = doc["d"].GetObject();
 
-            if (gwe.op == op_codes::DISPATCH.get_code()) {
+            if (gateway_ev.op == op_codes::DISPATCH.get_code()) {
                 dispatch_event event{};
                 event.deserialize(gv);
-                gwe.d = event;
-            } else if (gwe.op == op_codes::HELLO.get_code()) {
+                gateway_ev.d = event;
+            } else if (gateway_ev.op == op_codes::HELLO.get_code()) {
                 hello_event he{};
                 he.deserialize(gv);
-                gwe.d = he;
+                gateway_ev.d = he;
             }
         }
     }
-    return gwe;
+    return gateway_ev;
 }
 
 auto deserializer::deserialize(const std::string &msg) -> gateway_event {
