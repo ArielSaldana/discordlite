@@ -5,8 +5,7 @@
 #include "discord_client.hpp"
 #include "http-client/get_gateway_bot_api.h"
 #include "http-client/register_slash_command.h"
-#include "protocol/deserializer.h"
-#include "utilities/json_utils.h"
+#include "protocol/events/gateway_event.h"
 #include "utilities/protocol_url_generator.h"
 #include "websocket_client.hpp"
 
