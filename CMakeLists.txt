@@ -74,6 +74,8 @@ add_library(discordlite
         src/protocol/events/ready_event.h
         src/protocol/handlers/dispatch/ready_handler.cpp
         src/protocol/handlers/dispatch/ready_handler.h
+        src/utilities/json_utils.cpp
+        src/utilities/json_utils.h
 )
 target_include_directories(discordlite
         PUBLIC

@@ -6,6 +6,7 @@
 #include "http-client/get_gateway_bot_api.h"
 #include "http-client/register_slash_command.h"
 #include "protocol/deserializer.h"
+#include "utilities/json_utils.h"
 #include "utilities/protocol_url_generator.h"
 #include "websocket_client.hpp"
 
@@ -44,11 +45,11 @@ void discord_client::init_ws_client_events() {
     });
 
     client_state->get_ws_client()->on_message([this, &handler = this->event_handler_, &state = this->client_state](const std::string &msg) {
-        auto gateway_event = deserializer::deserialize(msg);
-        if (gateway_event.s != 0) {
-            state->set_sequence_counter(gateway_event.s);
+        auto gateway_ev = gateway_event::from_string(msg);
+        if (gateway_ev->s != 0) {
+            state->set_sequence_counter(gateway_ev->s);
         }
-        handler->handle_event(gateway_event.d, gateway_event.t);
+        handler->handle_event(gateway_ev->d, gateway_ev->t);
     });
 }
 void discord_client::connect(const bool should_resume) {
@@ -80,4 +81,3 @@ void discord_client::connect(const bool should_resume) {
 void discord_client::set_should_client_reconnect(const bool should_reconnect) {
     should_client_reconnect_ = should_reconnect;
 }
-
